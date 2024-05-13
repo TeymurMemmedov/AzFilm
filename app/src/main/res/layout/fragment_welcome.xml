@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvAppNameWelcome"
+        style="@style/AzFilmText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name_welcome"
+        app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imgWelcome"
+        style="@style/Centered_Horizontal_In_Parent"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:foreground="@drawable/gradient_welcome_img"
+        android:scaleType="centerInside"
+        android:src="@drawable/welcome_img"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/tvAppNameWelcome" />
+
+
+    <TextView
+        android:id="@+id/tvAppSlogan"
+        style="@style/Centered_Horizontal_In_Parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter"
+        android:paddingHorizontal="20dp"
+        android:text="@string/app_slogan"
+        android:textAlignment="center"
+        android:textFontWeight="500"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/imgWelcome" />
+
+    <Button
+        android:id="@+id/btnToCustomLogin"
+        style="@style/red_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/link_to_custom_login"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideLine"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvAppSlogan" />
+
+
+    <Button
+        android:id="@+id/btnToGoogleLogin"
+        style="@style/red_button"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginTop="12dp"
+        android:drawableLeft="@drawable/google"
+        android:drawableTint="@color/white"
+        android:text="@string/link_to_google_login"
+        app:backgroundTint="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideLine"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/btnToCustomLogin" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0.95"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

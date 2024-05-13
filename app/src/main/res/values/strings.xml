@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">AzFilm</string>
+
+    <string name="app_name_welcome">AZ<font color="#E41212">Film</font></string>
+
+    <string name="app_slogan">
+        Bədii filmlərimizi bir ünvandan\nizləyin
+    </string>
+
+    <string name="link_to_custom_login">
+        Giriş et
+    </string>
+
+    <string name="link_to_google_login">
+        Google hesabınla davam et
+    </string>
+
+    <string name="home_intro">
+        Filmlərə göz gəzdirə və axtara bilərsiniz.
+    </string>
+
+
+</resources>

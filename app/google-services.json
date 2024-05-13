@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "768821638145",
+    "project_id": "azfilm-64ce5",
+    "storage_bucket": "azfilm-64ce5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768821638145:android:e477254ae0daab391e7c00",
+        "android_client_info": {
+          "package_name": "com.example.azfilm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6ObFDF_UEOFLcuNMhG2oZ79HWMIv7YKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

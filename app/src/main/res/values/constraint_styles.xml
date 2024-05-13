@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Centered_Horizontal_In_Parent">
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+    </style>
+
+    <style name="Centered_Vertical_In_Parent">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <style
+        name="Centered_Horizontal_At_Top_In_Parent"
+        parent="Centered_Horizontal_In_Parent">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+    <style
+        name="Centered_Horizontal_At_Bottom_In_Parent"
+        parent="Centered_Horizontal_In_Parent">
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <style
+        name="Centered_Vertical_At_Start_In_Parent"
+        parent="Centered_Vertical_In_Parent">
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style
+        name="Centered_Vertical_At_End_In_Parent"
+        parent="Centered_Vertical_In_Parent">
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+    </style>
+
+    <style name="Centered_Full_In_Parent"
+        parent="Centered_Horizontal_In_Parent">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+
+
+
+</resources>

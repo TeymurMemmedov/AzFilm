@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="red_button">
+        <item name="android:background">@drawable/custom_button_bg</item>
+        <item name="backgroundTint">@color/red_500</item>
+
+        <item name="android:textSize">20sp</item>
+        <item name="android:textFontWeight" tools:targetApi="p">600</item>
+
+        <item name="android:paddingVertical" tools:targetApi="o">
+            16dp
+        </item>
+    </style>
+
+
+    <style name="AzFilmText">
+        <item name="android:textFontWeight" tools:ignore="NewApi">700</item>
+        <item name="android:textSize">60sp</item>
+        <item name="android:layout_marginTop">80dp</item>
+    </style>
+
+    <style name="AuthFragmentsTitle">
+        <item name="android:textFontWeight" tools:ignore="NewApi">700</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="AuthEditText">
+        <item name="android:fontWeight" tools:ignore="NewApi">500</item>
+        <item name="android:textColorHint">@color/gray_200</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/custom_ev_bg</item>
+        <item name="android:paddingVertical" tools:ignore="NewApi">20dp</item>
+        <item name="android:paddingHorizontal" tools:ignore="NewApi">20dp</item>
+    </style>
+
+    <style name="font_14_500">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontWeight" tools:ignore="NewApi">500</item>
+    </style>
+
+    <style name="font_16_600">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontWeight" tools:ignore="NewApi">600</item>
+    </style>
+
+    <style name="font_22_800">
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontWeight" tools:ignore="NewApi">800</item>
+    </style>
+
+    <style name="font_12_400">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textFontWeight" tools:targetApi="p">400</item>
+    </style>
+
+    <style name="font_16_400">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textFontWeight" tools:targetApi="p">400</item>
+    </style>
+
+    <style name="AuthDirectionText" parent="font_14_500"></style>
+
+    
+    <style name="TextFilmName" parent="font_16_600">
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="TextGenreName" parent="font_12_400">
+        <item name="android:textColor">@color/gray_200</item>
+    </style>
+
+    <style name="Image_Poster">
+        <item name="cornerSize">16dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="circle_image">
+        <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+
+    <style name="ev_find_movie">
+        <item name="android:background">@drawable/ev_find_movie_bg</item>
+        <item name="hintTextAppearance">@style/font_16_400</item>
+        <item name="android:textColorHint">@color/gray_200</item>
+        <item name="android:paddingVertical" tools:targetApi="o">18dp</item>
+        <item name="android:paddingStart">8dp</item>
+
+    </style>
+
+
+
+</resources>
