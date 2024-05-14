@@ -25,11 +25,11 @@ class HomeViewModel() : ViewModel() {
     private val _selectedFilm = MutableLiveData<MovieInfoDetailed?>()
     val selectedFilm: LiveData<MovieInfoDetailed?> = _selectedFilm
 
-//    private val _resultPage = MutableLiveData<Int>()
-//    val resultPage:LiveData<Int> = _resultPage
+    private val _resultPage = MutableLiveData<Int>()
+    val resultPage:LiveData<Int> = _resultPage
 //
-//    private val _totalPage = MutableLiveData<Int>()
-//    val totalPage:LiveData<Int> = _totalPage
+    private val _totalPage = MutableLiveData<Int>()
+    val totalPage:LiveData<Int> = _totalPage
 
 
 
@@ -48,16 +48,6 @@ class HomeViewModel() : ViewModel() {
 
 
 //
-//    fun randomlyUpdateResultPage() {
-//        var randomPageNum: Int
-//
-//        // Generate a random page number until it's different from the current page
-//        do {
-//            randomPageNum = Random.nextInt(1, _totalPage.value?.plus(1) ?:0 )
-//        } while (randomPageNum != _resultPage.value)
-//
-//        _resultPage.value = randomPageNum
-//    }
 
 
 
@@ -103,6 +93,8 @@ class HomeViewModel() : ViewModel() {
                         MovieHelper.initializeGenreNames(movies)
                         resultMovies = movies.shuffled()
                         _films.value  = resultMovies
+                        _totalPage.value = moviesResponse.total_pages
+
                     }
 
                     if (!response.isSuccessful) {

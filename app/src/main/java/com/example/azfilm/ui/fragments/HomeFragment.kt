@@ -24,6 +24,7 @@ import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import java.io.Serializable
+import kotlin.random.Random
 
 class HomeFragment:BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
@@ -80,6 +81,16 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
         }
 
 
+        viewBinding.btnRefresh.setOnClickListener {
+            var randomPageNum: Int
+
+
+            randomPageNum = Random.nextInt(1, homeViewModel.totalPage.value?.plus(1) ?:0 )
+
+            homeViewModel.getMoviesInAzerbaijani(randomPageNum)
+//            homeViewModel.randomlyUpdateResultPage()
+//            homeViewModel.resultPage.value?.let { it1 -> homeViewModel.getMoviesInAzerbaijani(it1) }
+        }
 
         homeViewModel.films.observe(viewLifecycleOwner){
             if (it != null) {
