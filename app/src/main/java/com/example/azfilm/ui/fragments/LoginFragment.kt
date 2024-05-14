@@ -1,19 +1,15 @@
 package com.example.azfilm.ui.fragments
 
-import LoginVM
-import android.annotation.SuppressLint
-import android.content.Intent
+import LoginViewModel
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.azfilm.R
 import com.example.azfilm.databinding.FragmentLoginBinding
-import com.example.azfilm.ui.activities.MainActivity
 import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.ui.utils.UIHelper
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +18,7 @@ class LoginFragment:BaseFragment<FragmentLoginBinding>(
     FragmentLoginBinding::inflate
 ) {
     lateinit var auth: FirebaseAuth
-    lateinit var viewModel: LoginVM
+    lateinit var viewModel: LoginViewModel
 
     var isPasswordHided = true
 
@@ -31,7 +27,7 @@ class LoginFragment:BaseFragment<FragmentLoginBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-        viewModel = ViewModelProvider(this)[LoginVM::class.java]
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
 
         viewBinding.apply {
@@ -67,8 +63,6 @@ class LoginFragment:BaseFragment<FragmentLoginBinding>(
                     email,
                     password,
                     onSuccess = {
-                        Log.d("loginResult", "signInWithEmail:success")
-                        Toast.makeText(requireContext(), "Login successed.", Toast.LENGTH_SHORT).show()
                         navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
                     },
                     onFailure = { errorMessage ->

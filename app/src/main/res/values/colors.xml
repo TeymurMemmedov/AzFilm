@@ -11,5 +11,9 @@
         #5A5A70
     </color>
 
+    <color name="star_color">
+        #FFFCC214
+    </color>
+
     <color name="red_500">#E41212</color>
 </resources>

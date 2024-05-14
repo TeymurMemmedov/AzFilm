@@ -19,5 +19,29 @@
         Filmlərə göz gəzdirə və axtara bilərsiniz.
     </string>
 
+    <string name="base_url">
+        https://api.themoviedb.org/3
+    </string>
+
+    <string name="movie_overview">
+        The film is about the stepmother who tried to be a real mother of a boy. But she could be a real mother only after some difficult events for her and child."
+    </string>
+
+    <string name="movie_title">
+        Stepmother
+    </string>
+
+    <string name="movie_genres">
+        Drama, Romance, Family
+    </string>
+
+    <string name="release_date">
+        1958
+    </string>
+
+    <string name="runtime">
+        1 hour 22 minute
+    </string>
+
 
 </resources>

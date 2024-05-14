@@ -1,14 +1,10 @@
-import android.widget.EditText
-import android.widget.ImageButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.azfilm.R
-import com.example.azfilm.ui.utils.UIHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class LoginVM : ViewModel() {
+class LoginViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _emailError = MutableLiveData<String?>(null)

@@ -4,53 +4,58 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.azfilm.R
 import com.example.azfilm.databinding.FragmentHomeBinding
 import com.example.azfilm.databinding.RvItemClassicsBinding
+import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.ui.adapters.GenericRvAdapter
+import com.example.azfilm.ui.models.MovieInfoDetailed
 import com.example.azfilm.ui.models.MoviesRepository
-import com.example.azfilm.ui.models.MovieService
 import com.example.azfilm.ui.models.MovieInfoMinimalistic
+import com.example.azfilm.ui.models.RetrofitInstance
 import com.example.azfilm.ui.viewmodels.HomeViewModel
 import com.example.azfilm.ui.viewmodels.HomeViewModelFactory
+import com.google.android.play.integrity.internal.i
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.io.Serializable
 
 class HomeFragment:BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
 ) {
     lateinit var auth: FirebaseAuth
+    lateinit var homeViewModel: HomeViewModel
     var user: FirebaseUser? = null
 
-    lateinit var homeViewModel: HomeViewModel
+
+    val homeFilmClickListener:(MovieInfoMinimalistic)->Unit = {
+        homeViewModel.getMovieById(it.id)
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        auth = FirebaseAuth.getInstance()
+
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        auth = FirebaseAuth.getInstance()
         user = auth.currentUser
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        homeViewModel.setNullToSelectedFilm()
 
-        val movieApiService = retrofit.create(MovieService::class.java)
-        val repository = MoviesRepository(movieApiService)
-        val viewModelFactory = HomeViewModelFactory(repository)
-        val viewModel = ViewModelProvider(this, viewModelFactory)[HomeViewModel::class.java]
-
-        viewModel.fetchRecentMovies()
+        viewBinding.tvGreeting.text = "Salam, ${user?.displayName}"
 
         val adapter = GenericRvAdapter<MovieInfoMinimalistic,RvItemClassicsBinding>(
             RvItemClassicsBinding::inflate
@@ -63,6 +68,9 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
                     if(!movie.poster_path.isNullOrBlank()) "https://image.tmdb.org/t/p/w500${movie.poster_path}"
                     else  R.drawable.not_found_img
                 )
+                root.setOnClickListener{
+                    homeFilmClickListener(movie)
+                }
             }
         }
 
@@ -73,21 +81,27 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
 
 
 
-        viewModel.films.observe(viewLifecycleOwner){
-           adapter.sendListToAdapter(it)
+        homeViewModel.films.observe(viewLifecycleOwner){
+            if (it != null) {
+                adapter.sendListToAdapter(it)
+            }
+        }
+
+        homeViewModel.selectedFilm.observe(viewLifecycleOwner){
+            if(it!=null) {
+                val bundle = Bundle()
+                bundle.putSerializable("movie", it)
+                findNavController().navigate(R.id.movieFragment, bundle)
+            }
         }
 
 
-//        viewBinding.tvUserDetails.text = "${user?.email}"
-//        viewBinding.btnLogout.setOnClickListener {
-//            auth.signOut()
-//
-//
-//            navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
-//
-//        }
 
+        viewBinding.btnLogout.setOnClickListener {
+            auth.signOut()
+            navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
 
+        }
 
         return  viewBinding.root
     }

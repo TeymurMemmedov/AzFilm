@@ -5,23 +5,26 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.azfilm.R
 import com.example.azfilm.databinding.FragmentRegisterBinding
 import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.ui.utils.UIHelper
+import com.example.azfilm.ui.viewmodels.RegisterViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class RegisterFragment:BaseFragment<FragmentRegisterBinding>(
     FragmentRegisterBinding::inflate
 ) {
 
-    lateinit var auth:FirebaseAuth
+    lateinit var registerViewModel: RegisterViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
-        auth = FirebaseAuth.getInstance()
 
         viewBinding.btnHideOrShowPassword.setOnClickListener {
             val thisButton = it as ImageButton
@@ -30,39 +33,17 @@ class RegisterFragment:BaseFragment<FragmentRegisterBinding>(
 
         viewBinding.apply {
             btnSubmit.setOnClickListener {
+                val username = evUsername.text.toString()
                 val email = evEmail.text.toString()
                 val password = evPassword.text.toString()
 
 
-
-                if (email.isNullOrBlank()) Toast.makeText(requireContext(),"Email must be entered",Toast.LENGTH_LONG).show()
-                else if (password.isNullOrBlank()) Toast.makeText(requireContext(),"Password must be entered",Toast.LENGTH_LONG)
-                else{
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(requireActivity()) { task ->
-                            if (task.isSuccessful) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("registerResult", "createUserWithEmail:success")
-                                val user = auth.currentUser
-
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Register Success.",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-
-                                navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
-
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("registerResult", "createUserWithEmail:failure", task.exception)
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Authentication failed.",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                            }
-                        }
+                if(registerViewModel.validateFields(username,email,password)){
+                    registerViewModel.createUserWithEmailAndPassword(
+                        username,email,password,
+                        onSuccess = { findNavController().setGraph(R.navigation.main_nav_graph)},
+                        onFailure = {str->Log.d("registerError",str)}
+                    )
                 }
 
             }
