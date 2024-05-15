@@ -25,33 +25,21 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
     lateinit var auth : FirebaseAuth
-    var user: FirebaseUser? = null
 
     companion object {
        lateinit var navGraphTracker: NavGraphTrackerViewModel
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("is user null?","${user?.email}")
-        if(user!=null){
-            navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
-        }
-        else{
-            navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("mesaj","qaqa men yarandim")
+        Log.d("MainActivityyy","onCreate")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         navGraphTracker = ViewModelProvider(this)[NavGraphTrackerViewModel::class.java]
 
         auth = FirebaseAuth.getInstance()
-        user = auth.currentUser
         val navHost = supportFragmentManager.findFragmentById(R.id.main_fragment_navhost) as NavHostFragment
         navController = navHost.navController
 
@@ -67,9 +55,47 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("MainActivityyy","onStart")
+        Log.d("is user null?Start","${auth.currentUser?.email}")
+        if(auth.currentUser!=null){
+            navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
+        }
+        else{
+            navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
+        }
+    }
+
+
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("is user null?Resume","${auth.currentUser?.email}")
+        Log.d("MainActivityyy", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("is user null?Pause","${auth.currentUser?.email}")
+        Log.d("MainActivityyy", "onPause")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("MainActivityyy", "onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MainActivityyy", "onDestroy")
+    }
+
     override fun onRestart() {
         super.onRestart()
-        Log.d("mesaj","qaqa men yeniden yarandim")
+        Log.d("is user null? Restart","${auth.currentUser?.email}")
+        Log.d("MainActivityyy", "onRestart")
     }
 
 

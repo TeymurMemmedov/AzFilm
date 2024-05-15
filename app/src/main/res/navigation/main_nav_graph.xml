@@ -10,6 +10,7 @@
         android:name="com.example.azfilm.ui.fragments.HomeFragment"
         tools:layout="@layout/fragment_home"
         android:label="HomeFragment" />
+
     <fragment
         android:id="@+id/movieFragment"
         android:name="com.example.azfilm.ui.fragments.MovieFragment"

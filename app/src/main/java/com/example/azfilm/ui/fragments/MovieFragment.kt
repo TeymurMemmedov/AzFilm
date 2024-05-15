@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import coil.load
 import com.example.azfilm.databinding.FragmentMovieBinding
 import com.example.azfilm.ui.models.MovieInfoDetailed
+import com.example.azfilm.ui.utils.MovieHelper
+import com.example.azfilm.ui.utils.PosterSizes
 
 class MovieFragment:BaseFragment<FragmentMovieBinding>
     (FragmentMovieBinding::inflate){
@@ -23,14 +25,13 @@ class MovieFragment:BaseFragment<FragmentMovieBinding>
         val minute = movie.runtime - (hour*60)
 
         viewBinding.apply {
-            imgMovie.load("https://image.tmdb.org/t/p/w500${movie.backdropPath}")
+
+            imgMovie.load("${MovieHelper.tmdbImageBaseUrl}${PosterSizes.W_500.printableName}${movie.backdropPath}")
             tvMovieName.text = movie.title
             tvMovieGenres.text = movie.genreIds.joinToString { it.name }
             tvOverview.text = movie.overview
             tvReleaseDate.text = movie.releaseDate
             tvDuration.text = "$hour hour $minute minute"
-
-
         }
 
         return  viewBinding.root

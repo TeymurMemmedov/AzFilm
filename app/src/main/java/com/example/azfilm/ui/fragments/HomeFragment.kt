@@ -1,10 +1,12 @@
 package com.example.azfilm.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,9 +32,10 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
 ) {
     lateinit var auth: FirebaseAuth
-    lateinit var homeViewModel: HomeViewModel
+    val homeViewModel: HomeViewModel by viewModels(
+        ownerProducer = { requireParentFragment() }
+    )
     var user: FirebaseUser? = null
-
 
     val homeFilmClickListener:(MovieInfoMinimalistic)->Unit = {
         homeViewModel.getMovieById(it.id)
@@ -42,8 +45,12 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        //        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        //        Log.d("selectedFilm","${homeViewModel.selectedFilm.value?.backdropPath}")
+        //        Log.d("navvv",navGraphTracker.navDestionationId.value.toString())
+
         auth = FirebaseAuth.getInstance()
+        Log.d("HomeFragment","onCreate")
 
     }
 
@@ -54,6 +61,8 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         user = auth.currentUser
+        Log.d("HomeFragment","onCreateView")
+
         homeViewModel.setNullToSelectedFilm()
 
         viewBinding.tvGreeting.text = "Salam, ${user?.displayName}"
@@ -80,12 +89,19 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
             layoutManager  = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         }
 
+        viewBinding.rvRecents2.apply {
+            this.adapter = adapter
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,true)
+        }
+
 
         viewBinding.btnRefresh.setOnClickListener {
             var randomPageNum: Int
+            do {
+                randomPageNum = Random.nextInt(1, homeViewModel.totalPage.value?.plus(1) ?:0 )
+            }while (randomPageNum == homeViewModel.resultPage.value)
 
 
-            randomPageNum = Random.nextInt(1, homeViewModel.totalPage.value?.plus(1) ?:0 )
 
             homeViewModel.getMoviesInAzerbaijani(randomPageNum)
 //            homeViewModel.randomlyUpdateResultPage()
@@ -116,4 +132,50 @@ class HomeFragment:BaseFragment<FragmentHomeBinding>(
 
         return  viewBinding.root
     }
+
+
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("HomeFragment", "onViewCreated")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("HomeFragment", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("HomeFragment", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("HomeFragment", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("HomeFragment", "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("HomeFragment", "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("HomeFragment", "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("HomeFragment", "onDetach")
+    }
 }
+
+

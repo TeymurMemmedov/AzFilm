@@ -5,7 +5,11 @@ import com.example.azfilm.ui.models.MovieInfoMinimalistic
 
 class MovieHelper {
 
+
+
     companion object{
+
+        val tmdbImageBaseUrl = "https://image.tmdb.org/t/p/"
         val genresMap = mapOf(
             28 to "Döyüş",
             12 to "Macəra",

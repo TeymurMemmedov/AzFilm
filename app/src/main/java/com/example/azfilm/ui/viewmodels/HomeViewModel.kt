@@ -91,9 +91,11 @@ class HomeViewModel() : ViewModel() {
                     response.body()?.let { moviesResponse ->
                         val movies = moviesResponse.results
                         MovieHelper.initializeGenreNames(movies)
-                        resultMovies = movies.shuffled()
+//                        resultMovies = movies.shuffled()
+                        resultMovies = movies
                         _films.value  = resultMovies
                         _totalPage.value = moviesResponse.total_pages
+                        _resultPage.value = moviesResponse.page
 
                     }
 

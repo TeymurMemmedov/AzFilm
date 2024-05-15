@@ -115,5 +115,11 @@
     </style>
 
 
+    <style name="poster_w500">
+        <item name="android:width">500dp</item>
+        <item name="android:height">750dp</item>
+    </style>
+
+
 
 </resources>
