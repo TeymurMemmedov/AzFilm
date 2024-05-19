@@ -1,24 +1,18 @@
 package com.example.azfilm.ui.activities
 
-import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.azfilm.R
 import com.example.azfilm.databinding.ActivityMainBinding
-import com.example.azfilm.ui.viewmodels.NavGraphTrackerViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MainActivityyy","onCreate")
@@ -43,6 +38,28 @@ class MainActivity : AppCompatActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.main_fragment_navhost) as NavHostFragment
         navController = navHost.navController
 
+        binding.bottomNavigationView.apply {
+//            isItemActiveIndicatorEnabled = false
+
+        }
+
+//        binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
+//            val selectedColor = if (menuItem.isChecked) {
+//                ContextCompat.getColorStateList(this,R.color.white)
+//            } else {
+//                ContextCompat.getColorStateList(this,R.color.black)
+//            }
+//            binding.bottomNavigationView.itemIconTintList = selectedColor
+//            true
+//        }
+
+//       binding.bottomNavigationView.setOnItemSelectedListener(object : NavigationBarView.OnItemSelectedListener{
+//           override fun onNavigationItemSelected(item: MenuItem): Boolean {
+//              item.iconTintList = ContextCompat.getColorStateList(this@MainActivity, R.color.white)
+//               return true
+//           }
+//
+//       })
 
         navGraphTracker.navGraphId.observe(this){
             navController.setGraph(it)
@@ -52,6 +69,8 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigationView.visibility = View.GONE
 
         }
+
+        binding.bottomNavigationView.setupWithNavController(navController)
 
     }
 
@@ -97,7 +116,5 @@ class MainActivity : AppCompatActivity() {
         Log.d("is user null? Restart","${auth.currentUser?.email}")
         Log.d("MainActivityyy", "onRestart")
     }
-
-
 
 }

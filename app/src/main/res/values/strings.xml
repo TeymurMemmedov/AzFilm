@@ -4,19 +4,19 @@
     <string name="app_name_welcome">AZ<font color="#E41212">Film</font></string>
 
     <string name="app_slogan">
-        Bədii filmlərimizi bir ünvandan\nizləyin
+        Discover Azerbaijani movies from one place
     </string>
 
     <string name="link_to_custom_login">
-        Giriş et
+        Log in
     </string>
 
     <string name="link_to_google_login">
-        Google hesabınla davam et
+        Log in with Google
     </string>
 
     <string name="home_intro">
-        Filmlərə göz gəzdirə və axtara bilərsiniz.
+        You can browse and search for movies.
     </string>
 
     <string name="base_url">

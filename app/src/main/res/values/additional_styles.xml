@@ -120,6 +120,10 @@
         <item name="android:height">750dp</item>
     </style>
 
+    <style name="Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/white</item>
+    </style>
+
 
 
 </resources>

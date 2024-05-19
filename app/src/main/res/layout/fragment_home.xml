@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
+    android:id="@+id/scrollHome"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
 
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -85,11 +85,11 @@
 
 
     <TextView
-        android:id="@+id/tvCategoryMostRecent"
+        android:id="@+id/tvRecents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
-        android:text="Ən yenilər (2024)"
+        android:text="Recents"
         android:textAppearance="@style/font_22_800"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
@@ -103,48 +103,83 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/tvCategoryMostRecent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvRecents" />
 
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/tvUserDetails"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        tools:text="Hello World!"-->
-    <!--        android:textSize="24sp"/>-->
+    <TextView
+        android:id="@+id/tvClassics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Classics"
+        android:textAppearance="@style/font_22_800"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/rvRecents" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRecents2"
+        android:id="@+id/rvClassics"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/rvRecents" />
+        app:layout_constraintTop_toBottomOf="@+id/tvClassics" />
 
-    <Button
+
+    <TextView
+        android:id="@+id/tvModerns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Moderns"
+        android:textAppearance="@style/font_22_800"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/rvClassics" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvModerns"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvModerns" />
+
+    <TextView
+        android:id="@+id/tvAnimations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Animations"
+        android:textAppearance="@style/font_22_800"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/rvModerns" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAnimations"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvAnimations" />
+
+
+    <ImageButton
         android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/icon_logout"
+        app:tint="@color/white"
+        app:backgroundTint="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalGuidline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

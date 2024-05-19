@@ -33,8 +33,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:hint="İstifadəçi adınız"
-        app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+        android:hint="Username"
+        app:layout_constraintEnd_toEndOf="@+id/evEmail"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintTop_toBottomOf="@+id/tvFragmentHeading" />
 
@@ -44,8 +44,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:hint="Email ünvanınız"
-        app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+        android:hint="Email Address"
+        app:layout_constraintEnd_toEndOf="@+id/evPassword"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintTop_toBottomOf="@+id/evUsername" />
 
@@ -57,19 +57,19 @@
         android:layout_marginTop="20dp"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+        app:layout_constraintEnd_toStartOf="@+id/btnHideOrShowPassword"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintTop_toBottomOf="@+id/evEmail" />
 
     <ImageButton
         android:id="@+id/btnHideOrShowPassword"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:src="@drawable/visibility"
+        android:paddingHorizontal="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/evPassword"
-        app:layout_constraintEnd_toEndOf="@+id/evPassword"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/evPassword"
         app:tint="@color/white" />
 
@@ -80,7 +80,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Hesab Yarat"
+        android:text="Register"
         app:layout_constraintEnd_toEndOf="@id/endGuideLine"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -91,7 +91,7 @@
         style="@style/AuthDirectionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hesabın var?"
+        android:text="Do you have an account?"
         android:textAlignment="textEnd"
         app:layout_constraintBaseline_toBaselineOf="@+id/btnGotoLogin"
         app:layout_constraintEnd_toStartOf="@+id/btnGotoLogin"
@@ -107,7 +107,7 @@
         android:layout_marginTop="12dp"
         android:gravity="start"
         android:paddingStart="4dp"
-        android:text="Daxil ol"
+        android:text="Log in"
         android:textAppearance="@style/AuthDirectionText"
         android:textFontWeight="600"
         app:backgroundTint="@android:color/transparent"

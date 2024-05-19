@@ -6,16 +6,16 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.azfilm.ui.fragments.WelcomeFragment"
+        android:name="com.example.azfilm.ui.welcome.WelcomeFragment"
         android:label="WelcomeFragment" />
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.azfilm.ui.fragments.LoginFragment"
+        android:name="com.example.azfilm.ui.login.LoginFragment"
         android:label="LoginFragment" />
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.azfilm.ui.fragments.RegisterFragment"
+        android:name="com.example.azfilm.ui.register.RegisterFragment"
         android:label="RegisterFragment" />
 
 </navigation>
