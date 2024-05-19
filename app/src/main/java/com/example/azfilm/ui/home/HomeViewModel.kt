@@ -1,8 +1,6 @@
 package com.example.azfilm.ui.home
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,14 +8,17 @@ import com.example.azfilm.data.models.DiscoverMovieResponse
 import com.example.azfilm.data.models.MovieInfoDetailed
 import com.example.azfilm.data.models.MovieInfoMinimalistic
 import com.example.azfilm.api.RetrofitInstance
+import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.utils.MovieHelper
 import com.example.azfilm.utils.MovieListTypes
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-@RequiresApi(Build.VERSION_CODES.O)
-class HomeViewModel() : ViewModel() {
+
+class HomeViewModel(
+    private val movieRepository: MovieRepository
+) : ViewModel() {
 
         private val _recentFilms = MutableLiveData<List<MovieInfoMinimalistic>?>()
         val recentFilms: LiveData<List<MovieInfoMinimalistic>?> = _recentFilms
@@ -40,75 +41,53 @@ class HomeViewModel() : ViewModel() {
                 currentPage[type] = 1
                 totalPages[type] = 1
             }
-            getMovies(1, MovieListTypes.RECENTS)
-            getMovies(1, MovieListTypes.CLASSICS)
-            getMovies(1, MovieListTypes.MODERNS)
-            getMovies(1, MovieListTypes.ANIMATIONS)
+            fetchMovies(1, MovieListTypes.RECENTS)
+            fetchMovies(1, MovieListTypes.CLASSICS)
+            fetchMovies(1, MovieListTypes.MODERNS)
+            fetchMovies(1, MovieListTypes.ANIMATIONS)
         }
 
 
-        fun getMovies(page: Int, movieListType: MovieListTypes) {
-            val call: Call<DiscoverMovieResponse> = when (movieListType) {
-                MovieListTypes.RECENTS -> RetrofitInstance.api.getRecents(page = page)
-                MovieListTypes.CLASSICS -> RetrofitInstance.api.getClassics(page = page)
-                MovieListTypes.MODERNS -> RetrofitInstance.api.getModerns(page = page)
-                MovieListTypes.ANIMATIONS -> RetrofitInstance.api.getAnimations(page = page)
+    fun fetchMovies(page: Int, movieListType: MovieListTypes) {
+        movieRepository.getMovies(page, movieListType,
+            onSuccess = { moviesResponse ->
+
+                val movies = moviesResponse.results
+                MovieHelper.initializeGenreNames(movies)
+                val resultMovies = movies.filter {
+                    !it.poster_path.isNullOrBlank() && !it.backdrop_path.isNullOrBlank()
+                }.shuffled()
+                val currentList = when (movieListType) {
+                    MovieListTypes.RECENTS -> _recentFilms.value?.toMutableList() ?: mutableListOf()
+                    MovieListTypes.CLASSICS -> _classics.value?.toMutableList() ?: mutableListOf()
+                    MovieListTypes.MODERNS -> _moderns.value?.toMutableList() ?: mutableListOf()
+                    MovieListTypes.ANIMATIONS -> _animations.value?.toMutableList() ?: mutableListOf()
+                }
+                currentList.addAll(resultMovies)
+
+                when (movieListType) {
+                    MovieListTypes.RECENTS -> _recentFilms.value = currentList
+                    MovieListTypes.CLASSICS -> _classics.value = currentList
+                    MovieListTypes.MODERNS -> _moderns.value = currentList
+                    MovieListTypes.ANIMATIONS -> _animations.value = currentList
+                }
+
+                totalPages[movieListType] = moviesResponse.total_pages
+                currentPage[movieListType] = moviesResponse.page
+
+                // Optionally update the page and total page information here if needed
+            },
+            onError = { throwable ->
+                Log.d("NoRespond", throwable.message ?: "Unknown error")
             }
-
-            call.enqueue(object : Callback<DiscoverMovieResponse> {
-                override fun onResponse(
-                    call: Call<DiscoverMovieResponse>,
-                    response: Response<DiscoverMovieResponse>
-                ) {
-                    response.body()?.let { moviesResponse ->
-                        val movies = moviesResponse.results
-                        MovieHelper.initializeGenreNames(movies)
-                        val resultMovies = movies.filter {
-                            !it.poster_path.isNullOrBlank() && !it.backdrop_path.isNullOrBlank()
-                        }.shuffled()
-                        val currentList = when (movieListType) {
-                            MovieListTypes.RECENTS -> _recentFilms.value?.toMutableList() ?: mutableListOf()
-                            MovieListTypes.CLASSICS -> _classics.value?.toMutableList() ?: mutableListOf()
-                            MovieListTypes.MODERNS -> _moderns.value?.toMutableList() ?: mutableListOf()
-                            MovieListTypes.ANIMATIONS -> _animations.value?.toMutableList() ?: mutableListOf()
-                        }
-                        currentList.addAll(resultMovies)
-
-                        when (movieListType) {
-                            MovieListTypes.RECENTS -> {
-                                _recentFilms.value = currentList
-                            }
-                            MovieListTypes.CLASSICS -> {
-                                _classics.value = currentList
-                            }
-                            MovieListTypes.MODERNS -> {
-                                _moderns.value = currentList
-                            }
-                            MovieListTypes.ANIMATIONS -> {
-                                _animations.value = currentList
-                            }
-                        }
-                        totalPages[movieListType] = moviesResponse.total_pages
-                        currentPage[movieListType] = moviesResponse.page
-                    }
-
-                    if (!response.isSuccessful) {
-                        Log.d("apiError", "${response.errorBody()}")
-                        Log.d("Code", "${response.code()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<DiscoverMovieResponse>, t: Throwable) {
-                    Log.d("NoRespond", "${t.message}")
-                }
-            })
-        }
+        )
+    }
 
         fun loadMoreMovies(movieListType: MovieListTypes) {
             val current = currentPage[movieListType] ?: return
             val total = totalPages[movieListType] ?: return
             if (current < total) {
-                getMovies(current + 1, movieListType)
+                fetchMovies(current + 1, movieListType)
             }
         }
 

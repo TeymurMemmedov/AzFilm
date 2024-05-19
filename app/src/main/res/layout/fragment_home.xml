@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintTop_toTopOf="@+id/horizontalGuidline"
         app:shapeAppearanceOverlay="@style/circle_image"
-        android:src="@drawable/anonim_user_img" />
+        android:src="@drawable/img_user_anonym" />
 
     <TextView
         android:id="@+id/tvGreeting"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:hint="Film axtarın"
+        android:hint="Search a film!"
         android:inputType="text"
         android:imeOptions="actionSearch"
         app:layout_constraintEnd_toStartOf="@+id/btSearch"
@@ -62,7 +62,7 @@
         android:background="@drawable/ev_find_movie_bg"
         android:padding="8dp"
         android:layout_marginHorizontal="4dp"
-        android:src="@drawable/search"
+        android:src="@drawable/icon_search"
         app:layout_constraintBottom_toBottomOf="@+id/evFindMovie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/evFindMovie"

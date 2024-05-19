@@ -8,16 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.azfilm.R
+import com.example.azfilm.api.RetrofitInstance
 import com.example.azfilm.databinding.FragmentHomeBinding
 import com.example.azfilm.databinding.RvMovieWithPosterBinding
 import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.ui.adapters.GenericRvAdapter
 import com.example.azfilm.data.models.MovieInfoMinimalistic
 import com.example.azfilm.base.BaseFragment
+import com.example.azfilm.data.MovieRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -25,9 +28,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
 ) {
     lateinit var auth: FirebaseAuth
-    val homeViewModel: HomeViewModel by viewModels(
-        ownerProducer = { requireParentFragment() }
-    )
+    lateinit var homeViewModel: HomeViewModel
     var user: FirebaseUser? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -41,6 +42,8 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         Log.d("HomeFragment","onCreate")
+        homeViewModel = ViewModelProvider(this,
+            HomeViewModelFactory(MovieRepository(RetrofitInstance.api)))[HomeViewModel::class.java]
 
     }
 
@@ -64,7 +67,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
                 tvGenres.text = movie.genre_names.joinToString()
                 imgPoster.load(
                     if(!movie.poster_path.isNullOrBlank()) "https://image.tmdb.org/t/p/w500${movie.poster_path}"
-                    else  R.drawable.not_found_img
+                    else  R.drawable.img_not_found_replacer
                 )
                 root.setOnClickListener{
                     homeFilmClickListener(movie)

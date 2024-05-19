@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:src="@drawable/visibility"
+        android:src="@drawable/icon_visibility"
         android:paddingHorizontal="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/evPassword"
         app:layout_constraintEnd_toEndOf="parent"

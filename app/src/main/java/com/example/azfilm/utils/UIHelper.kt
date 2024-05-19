@@ -15,12 +15,12 @@ class UIHelper {
 
             val newType = when (currentType) {
                 InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD -> {
-                    btn.setImageResource(R.drawable.visibility_off)
+                    btn.setImageResource(R.drawable.icon_visibility_off)
                     InputType.TYPE_CLASS_TEXT
                 }
 
                 InputType.TYPE_CLASS_TEXT -> {
-                    btn.setImageResource(R.drawable.visibility)
+                    btn.setImageResource(R.drawable.icon_visibility)
                     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 }
 

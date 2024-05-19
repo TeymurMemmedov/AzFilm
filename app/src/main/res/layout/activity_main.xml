@@ -10,35 +10,29 @@
         android:id="@+id/main_fragment_navhost"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavContainer"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <View
-        android:id="@+id/bottomNavContainer"
-        android:layout_width="match_parent"
-        android:background="@drawable/gradient_welcome_img"
-        android:layout_height="112dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideLine"/>
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="8dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="64dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/stroke_bottom_nav"
         android:visibility="gone"
         app:backgroundTint="@color/red_500"
-        app:menu="@menu/menu"
-        android:background="@drawable/stroke_bottom_nav"
-        app:labelVisibilityMode="unlabeled"
-        app:itemIconSize="32dp"
         app:itemActiveIndicatorStyle="@style/Custom.Indicator"
+        app:itemIconSize="32dp"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toTopOf="@id/bottomNavContainer"
+        app:menu="@menu/menu"
+
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Guideline

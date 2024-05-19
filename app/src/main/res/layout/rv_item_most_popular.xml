@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:src = "@drawable/backdrop_300"
+        tools:src = "@drawable/img_backdrop_stepmother_300"
         app:shapeAppearanceOverlay="@style/Image_Poster"
         />
 

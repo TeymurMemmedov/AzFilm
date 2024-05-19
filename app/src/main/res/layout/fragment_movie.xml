@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/stepmother" />
+        tools:src="@drawable/img_stepmother" />
 
     <TextView
         android:id="@+id/tvMovieName"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:padding="8dp"
-        android:src="@drawable/favorite_filled"
+        android:src="@drawable/icon_favorite_filled"
         app:layout_constraintBottom_toBottomOf="@id/tvMovieGenres"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toTopOf="@id/tvMovieName"
@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:text="8.5"
-        app:drawableStartCompat="@drawable/star_rating"
+        app:drawableStartCompat="@drawable/icon_star_rating"
         app:drawableTint="@color/star_color"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintHorizontal_bias="0.5"
@@ -93,7 +93,7 @@
         style="@style/Tv_Movies"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        app:drawableStartCompat="@drawable/schedule"
+        app:drawableStartCompat="@drawable/icon_schedule"
         app:drawableTint="@color/white"
         android:drawablePadding="8dp"
         app:layout_constraintEnd_toStartOf="@+id/tvRating"

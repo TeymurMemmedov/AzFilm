@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 interface MovieService {
 
@@ -19,11 +20,11 @@ interface MovieService {
         @Query("page") page: Int,
     ): Call<DiscoverMovieResponse>
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     @GET("discover/movie")
     fun getRecents(
         @Query("page") page:Int,
-        @Query("primary_release_year") year:Int = LocalDate.now().year
+        @Query("primary_release_year") year:Int = 2024
     ) :Call<DiscoverMovieResponse>
 
 

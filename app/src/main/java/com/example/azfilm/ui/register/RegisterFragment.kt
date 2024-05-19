@@ -9,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.azfilm.R
 import com.example.azfilm.databinding.FragmentRegisterBinding
 import com.example.azfilm.base.BaseFragment
+import com.example.azfilm.ui.activities.MainActivity
+import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.utils.UIHelper
 
 class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
@@ -37,7 +39,7 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
                 if(registerViewModel.validateFields(username,email,password)){
                     registerViewModel.createUserWithEmailAndPassword(
                         username,email,password,
-                        onSuccess = { findNavController().setGraph(R.navigation.main_nav_graph)},
+                        onSuccess = { navGraphTracker.setNavGraph(R.navigation.main_nav_graph)},
                         onFailure = {str->Log.d("registerError",str)}
                     )
                 }
