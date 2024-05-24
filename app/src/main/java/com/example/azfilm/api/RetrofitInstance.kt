@@ -5,7 +5,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-
     val client = OkHttpClient.Builder()
         .addInterceptor(CustomInterceptor())
         .build()
