@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.azfilm.data.models.DiscoverMovieResponse
 import com.example.azfilm.data.models.MovieInfoDetailed
 import com.example.azfilm.data.models.MovieInfoMinimalistic
@@ -11,6 +12,9 @@ import com.example.azfilm.api.RetrofitInstance
 import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.utils.MovieHelper
 import com.example.azfilm.utils.MovieListTypes
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +22,8 @@ import retrofit2.Response
 
 class HomeViewModel(
     private val movieRepository: MovieRepository
-) : ViewModel() {
+) : ViewModel()
+{
 
         private val _recentFilms = MutableLiveData<List<MovieInfoMinimalistic>?>()
         val recentFilms: LiveData<List<MovieInfoMinimalistic>?> = _recentFilms
@@ -41,55 +46,53 @@ class HomeViewModel(
                 currentPage[type] = 1
                 totalPages[type] = 1
             }
-            fetchMovies(1, MovieListTypes.RECENTS)
-            fetchMovies(1, MovieListTypes.CLASSICS)
-            fetchMovies(1, MovieListTypes.MODERNS)
-            fetchMovies(1, MovieListTypes.ANIMATIONS)
+
+            viewModelScope.launch(Dispatchers.IO) {
+               fetchMovies(1, MovieListTypes.RECENTS)
+                fetchMovies(1, MovieListTypes.CLASSICS)
+               fetchMovies(1, MovieListTypes.MODERNS)
+               fetchMovies(1, MovieListTypes.ANIMATIONS)
+                Log.d("mythread", Thread.currentThread().name)
+            }
         }
 
 
-    fun fetchMovies(page: Int, movieListType: MovieListTypes) {
-        movieRepository.getMovies(page, movieListType,
-            onSuccess = { moviesResponse ->
 
-                val movies = moviesResponse.results
-                MovieHelper.initializeGenreNames(movies)
-                val resultMovies = movies.filter {
-                    !it.poster_path.isNullOrBlank() && !it.backdrop_path.isNullOrBlank()
-                }.shuffled()
-                val currentList = when (movieListType) {
-                    MovieListTypes.RECENTS -> _recentFilms.value?.toMutableList() ?: mutableListOf()
-                    MovieListTypes.CLASSICS -> _classics.value?.toMutableList() ?: mutableListOf()
-                    MovieListTypes.MODERNS -> _moderns.value?.toMutableList() ?: mutableListOf()
-                    MovieListTypes.ANIMATIONS -> _animations.value?.toMutableList() ?: mutableListOf()
-                }
-                currentList.addAll(resultMovies)
 
-                when (movieListType) {
-                    MovieListTypes.RECENTS -> _recentFilms.value = currentList
-                    MovieListTypes.CLASSICS -> _classics.value = currentList
-                    MovieListTypes.MODERNS -> _moderns.value = currentList
-                    MovieListTypes.ANIMATIONS -> _animations.value = currentList
-                }
+    suspend fun fetchMovies(page: Int, movieListType: MovieListTypes) {
 
-                totalPages[movieListType] = moviesResponse.total_pages
-                currentPage[movieListType] = moviesResponse.page
+        val response = movieRepository.getMovies(page, movieListType)
+        if (response == null) {
+            Log.d("NoRespond", "Error",)
+        }
+        response?.results?.let {
+            val movies = it.filter {
+                !it.poster_path.isNullOrBlank() && !it.backdrop_path.isNullOrBlank()
+            }.shuffled()
+            MovieHelper.initializeGenreNames(movies)
 
-                // Optionally update the page and total page information here if needed
-            },
-            onError = { throwable ->
-                Log.d("NoRespond", throwable.message ?: "Unknown error")
+            when (movieListType) {
+                MovieListTypes.RECENTS -> _recentFilms.postValue(movies)
+                MovieListTypes.CLASSICS -> _classics.postValue(movies)
+                MovieListTypes.MODERNS -> _moderns.postValue(movies)
+                MovieListTypes.ANIMATIONS -> _animations.postValue(movies)
             }
-        )
+        }
+
+
+//        return movies
     }
 
-        fun loadMoreMovies(movieListType: MovieListTypes) {
-            val current = currentPage[movieListType] ?: return
-            val total = totalPages[movieListType] ?: return
-            if (current < total) {
-                fetchMovies(current + 1, movieListType)
-            }
-        }
+
+
+
+//        suspend fun loadMoreMovies(movieListType: MovieListTypes) {
+//            val current = currentPage[movieListType] ?: return
+//            val total = totalPages[movieListType] ?: return
+//            if (current < total) {
+//                fetchMovies(current + 1, movieListType)
+//            }
+//        }
 
     private val _selectedFilm = MutableLiveData<MovieInfoDetailed?>()
     val selectedFilm: LiveData<MovieInfoDetailed?> = _selectedFilm
@@ -127,18 +130,8 @@ class HomeViewModel(
 
     }
 
-
-
-    private fun logResponseInfo(response: Response<DiscoverMovieResponse>) {
-        var headerText = ""
-        response.headers().forEach {
-            headerText += "${it.first} : ${it.second}\n"
-        }
-        Log.d("headers", headerText)
-        Log.d("message", response.message())
-        Log.d("Code", "${response.code()}")
-    }
 }
+
 
 
 

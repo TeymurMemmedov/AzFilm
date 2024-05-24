@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.azfilm.data.models.DiscoverMovieResponse
 import com.example.azfilm.data.models.MovieInfoDetailed
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -16,44 +17,44 @@ interface MovieService {
 
 
     @GET("discover/movie")
-    fun getWithoutFiltering(
+    suspend fun getWithoutFiltering(
         @Query("page") page: Int,
-    ): Call<DiscoverMovieResponse>
+    ): Response<DiscoverMovieResponse>
 
 
     @GET("discover/movie")
-    fun getRecents(
+    suspend fun getRecents(
         @Query("page") page:Int,
         @Query("primary_release_year") year:Int = 2024
-    ) :Call<DiscoverMovieResponse>
+    ) :Response<DiscoverMovieResponse>
 
 
     @GET("discover/movie")
-    fun getClassics(
+    suspend fun getClassics(
         @Query("page") page: Int,
         @Query("primary_release_date.gte") yearFrom:String = "1898-01-01",
         @Query("primary_release_date.lte") yearTo:String = "1991-12-31"
-    ):Call<DiscoverMovieResponse>
+    ):Response<DiscoverMovieResponse>
 
     @GET("discover/movie")
-    fun getModerns(
+    suspend fun getModerns(
         @Query("page") page: Int,
         @Query("primary_release_date.gte") yearFrom:String = "1992-01-01",
         @Query("primary_release_date.lte") yearTo:String = "2023-12-31"
-    ):Call<DiscoverMovieResponse>
+    ):Response<DiscoverMovieResponse>
 
     @GET("discover/movie")
-    fun getAnimations(
+    suspend fun getAnimations(
         @Query("page") page: Int,
         @Query("with_genres") genre:String = "16"
-    ):Call<DiscoverMovieResponse>
+    ):Response<DiscoverMovieResponse>
 
 
     @GET("movie/{id}")
-    fun getMovieById(
+     fun getMovieById(
         @Path("id")id:Long,
 //        @Query("append_to_response") appendToResponse:String = "images"
-    ):Call<MovieInfoDetailed>
+    ): Call<MovieInfoDetailed>
 
    // https://api.themoviedb.org/3/movie/524321?api_key=52c8f60847852a53d10858ec3c595bf4&append_to_response=credits,images
 

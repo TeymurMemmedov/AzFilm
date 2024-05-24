@@ -37,7 +37,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvFilmName"
-        tools:text = "Dram, Aksiyon"/>
+        tools:text = "Dram, Aksiyon"
+        android:maxEms="16" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
