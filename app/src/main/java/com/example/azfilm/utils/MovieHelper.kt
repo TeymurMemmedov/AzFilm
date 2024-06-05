@@ -1,8 +1,5 @@
 package com.example.azfilm.utils
 
-import android.graphics.Movie
-import com.example.azfilm.data.models.MovieInfoMinimalistic
-
 class MovieHelper {
 
 
@@ -10,6 +7,12 @@ class MovieHelper {
     companion object{
 
         val tmdbImageBaseUrl = "https://image.tmdb.org/t/p/"
+        fun String.generateImageFullPath(
+            size:String = PosterSizes.W_500.printableName,
+            posterPath:String = this
+        ) = "${tmdbImageBaseUrl}${size}${this}"
+
+
         val genresMap = mapOf(
             28 to "Action",
             12 to "Adventure",
@@ -31,20 +34,20 @@ class MovieHelper {
             10752 to "War",
         )
 
-        fun initializeGenreNames(movies: List<MovieInfoMinimalistic>) {
-            for (movie in movies) {
-                // Ensure movie.genre_names is initialized
-                if (movie.genre_names == null) {
-                    movie.genre_names = mutableListOf()
-                }
-
-                for (genre_id in movie.genre_ids) {
-                    genresMap[genre_id]?.let {
-                        movie.genre_names.add(it)
-                    }
-                }
-            }
-        }
+//        fun initializeGenreNames(movies: List<MovieInfoMinimalistic>) {
+//            for (movie in movies) {
+//                // Ensure movie.genre_names is initialized
+//                if (movie.genre_names == null) {
+//                    movie.genre_names = mutableListOf()
+//                }
+//
+//                for (genre_id in movie.genre_ids) {
+//                    genresMap[genre_id]?.let {
+//                        movie.genre_names.add(it)
+//                    }
+//                }
+//            }
+//        }
 
 
 

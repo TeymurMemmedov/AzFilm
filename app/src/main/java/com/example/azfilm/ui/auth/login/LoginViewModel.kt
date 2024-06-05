@@ -1,4 +1,4 @@
-package com.example.azfilm.ui.login
+package com.example.azfilm.ui.auth.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -51,9 +51,6 @@ class LoginViewModel : ViewModel() {
                     }
                 }
     }
-
-    fun getCurrentUser(): FirebaseUser? = auth.currentUser
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.azfilm.ui.register
+package com.example.azfilm.ui.auth.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -46,7 +46,7 @@ class RegisterViewModel:ViewModel() {
         return  isValid
     }
 
-    fun createUserWithEmailAndPassword(
+    fun register(
         username: String,
         email: String,
         password: String,

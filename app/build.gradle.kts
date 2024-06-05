@@ -15,7 +15,7 @@ android {
     }
     defaultConfig {
         applicationId = "com.example.azfilm"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -48,6 +48,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-auth:23.0.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
@@ -74,6 +75,10 @@ dependencies {
 
     ksp("androidx.room:room-compiler:$room_version")
 
+    //logging interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    
     implementation("io.coil-kt:coil:2.6.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

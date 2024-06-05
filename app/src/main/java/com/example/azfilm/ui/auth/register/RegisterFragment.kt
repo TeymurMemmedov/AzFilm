@@ -1,4 +1,4 @@
-package com.example.azfilm.ui.register
+package com.example.azfilm.ui.auth.register
 
 import android.os.Bundle
 import android.util.Log
@@ -9,8 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.azfilm.R
 import com.example.azfilm.databinding.FragmentRegisterBinding
 import com.example.azfilm.base.BaseFragment
-import com.example.azfilm.ui.activities.MainActivity
-import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
+import com.example.azfilm.ui.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.utils.UIHelper
 
 class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
@@ -24,12 +23,12 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
 
-        viewBinding.btnHideOrShowPassword.setOnClickListener {
+        binding.btnHideOrShowPassword.setOnClickListener {
             val thisButton = it as ImageButton
-            UIHelper.hideShowPassword(viewBinding.evPassword,it)
+            UIHelper.hideShowPassword(binding.evPassword,it)
         }
 
-        viewBinding.apply {
+        binding.apply {
             btnSubmit.setOnClickListener {
                 val username = evUsername.text.toString()
                 val email = evEmail.text.toString()
@@ -37,7 +36,7 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
 
 
                 if(registerViewModel.validateFields(username,email,password)){
-                    registerViewModel.createUserWithEmailAndPassword(
+                    registerViewModel.register(
                         username,email,password,
                         onSuccess = { navGraphTracker.setNavGraph(R.navigation.main_nav_graph)},
                         onFailure = {str->Log.d("registerError",str)}
@@ -47,7 +46,7 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
             }
         }
 
-        viewBinding.btnGotoLogin.setOnClickListener {
+        binding.btnGotoLogin.setOnClickListener {
             findNavController().navigate(R.id.loginFragment)
         }
     }

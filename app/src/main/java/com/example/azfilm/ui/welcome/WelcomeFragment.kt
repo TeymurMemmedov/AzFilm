@@ -19,9 +19,9 @@ class WelcomeFragment: BaseFragment<FragmentWelcomeBinding>(
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        viewBinding.btnToCustomLogin.setOnClickListener {
+        binding.btnToCustomLogin.setOnClickListener {
             findNavController().navigate(R.id.loginFragment)
         }
-        return viewBinding.root
+        return binding.root
     }
 }

@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp">
+    android:layout_marginEnd="8dp"
+   android:background="@drawable/stroke_1dp">
 
 
-<!--    style="@style/poster_w500"-->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgPoster"
         android:layout_width="200dp"
@@ -23,22 +23,24 @@
 
     <TextView
         android:id="@+id/tvFilmName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/TextFilmName"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/imgPoster"
+        app:layout_constraintEnd_toEndOf="@id/imgPoster"
         app:layout_constraintTop_toBottomOf="@+id/imgPoster"
-        tools:text="Nasimi" />
+        tools:text="Nasimi"/>
 
     <TextView
         android:id="@+id/tvGenres"
-        android:textAppearance="@style/TextGenreName"
-        android:layout_width="wrap_content"
+        style="@style/TextGenreName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/imgPoster"
+        app:layout_constraintEnd_toEndOf="@id/imgPoster"
         app:layout_constraintTop_toBottomOf="@id/tvFilmName"
         tools:text = "Dram, Aksiyon"
-        android:maxEms="16" />
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,21 +6,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.example.azfilm.AzFilmApplication
 import com.example.azfilm.R
-import com.example.azfilm.api.RetrofitInstance
+import com.example.azfilm.api.serviceModels.MovieResponseItem
 import com.example.azfilm.databinding.FragmentHomeBinding
 import com.example.azfilm.databinding.RvMovieWithPosterBinding
-import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
+import com.example.azfilm.ui.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.ui.adapters.GenericRvAdapter
-import com.example.azfilm.data.models.MovieInfoMinimalistic
 import com.example.azfilm.base.BaseFragment
-import com.example.azfilm.data.MovieRepository
+import com.example.azfilm.base.BasePagingResponse
+import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
+import com.example.azfilm.data.mapper.mapMovieResponseItemToMovieUIModel
+import com.example.azfilm.ui.favorites.FavoritesViewModel
+import com.example.azfilm.ui.uiModels.MovieUIModel
+import com.example.azfilm.utils.MovieHelper.Companion.generateImageFullPath
+import com.example.azfilm.utils.MovieListTypes
+import com.example.azfilm.utils.ResultWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -29,13 +37,12 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 ) {
     lateinit var auth: FirebaseAuth
     lateinit var homeViewModel: HomeViewModel
+    lateinit var favoritesViewModel: FavoritesViewModel
     var user: FirebaseUser? = null
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    val homeFilmClickListener:(MovieInfoMinimalistic)->Unit = {
+    val homeFilmClickListener:(MovieUIModel)->Unit = {
         homeViewModel.getMovieById(it.id)
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +50,13 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         auth = FirebaseAuth.getInstance()
         Log.d("HomeFragment","onCreate")
         homeViewModel = ViewModelProvider(this,
-            HomeViewModelFactory(MovieRepository(RetrofitInstance.api)))[HomeViewModel::class.java]
+            HomeViewModelFactory((requireActivity().application as AzFilmApplication).repository))[HomeViewModel::class.java]
+
+
+        favoritesViewModel = ViewModelProvider(requireActivity()).get(FavoritesViewModel::class.java)
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,15 +68,18 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 
         homeViewModel.setNullToSelectedFilm()
 
-        viewBinding.tvGreeting.text = "Hello, ${user?.displayName}"
+        binding.tvGreeting.text = "Hello, ${user?.displayName}"
 
-        val bind:(RvMovieWithPosterBinding, MovieInfoMinimalistic, Int)->Unit =  { binding, movie, position ->
+        val bind:(RvMovieWithPosterBinding, MovieUIModel, Int)->Unit =  { binding, movie, position ->
             binding.apply {
-                tvFilmName.text = movie.original_title
-                tvGenres.text = movie.genre_names.joinToString()
+                tvFilmName.text = movie.title
+                tvGenres.text = movie.genres.joinToString()
                 imgPoster.load(
-                    if(!movie.poster_path.isNullOrBlank()) "https://image.tmdb.org/t/p/w500${movie.poster_path}"
-                    else  R.drawable.img_not_found_replacer
+
+                    if(movie.posterPath.isNullOrBlank())
+                        R.drawable.img_not_found_replacer
+                    else
+                        movie.posterPath.generateImageFullPath()
                 )
                 root.setOnClickListener{
                     homeFilmClickListener(movie)
@@ -75,27 +87,27 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
             }
         }
 
-        val recentsAdapter = GenericRvAdapter<MovieInfoMinimalistic,RvMovieWithPosterBinding>(
+        val recentsAdapter = GenericRvAdapter<MovieUIModel,RvMovieWithPosterBinding>(
             RvMovieWithPosterBinding::inflate,
             bind
         )
 
 
-        val classicsAdapter = GenericRvAdapter<MovieInfoMinimalistic,RvMovieWithPosterBinding>(
+        val classicsAdapter = GenericRvAdapter<MovieUIModel,RvMovieWithPosterBinding>(
             RvMovieWithPosterBinding::inflate,
             bind
         )
 
-        val modernsAdapter = GenericRvAdapter<MovieInfoMinimalistic,RvMovieWithPosterBinding>(
+        val modernsAdapter = GenericRvAdapter<MovieUIModel,RvMovieWithPosterBinding>(
             RvMovieWithPosterBinding::inflate,
             bind
         )
 
-        val animationsAdapter = GenericRvAdapter<MovieInfoMinimalistic,RvMovieWithPosterBinding>(
+        val animationsAdapter = GenericRvAdapter<MovieUIModel,RvMovieWithPosterBinding>(
             RvMovieWithPosterBinding::inflate,
             bind
         )
-        viewBinding.apply {
+        binding.apply {
             val commonLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
             rvRecents.apply { adapter = recentsAdapter; layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)  }
@@ -104,49 +116,71 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
             rvAnimations.apply { adapter = animationsAdapter; layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)  }
         }
 
+         fun updateUI(result: ResultWrapper<BasePagingResponse<MovieResponseItem>?>, adapter: GenericRvAdapter<MovieUIModel, RvMovieWithPosterBinding>,progressBar:ProgressBar) {
+            when (result) {
+                is ResultWrapper.Loading -> progressBar.visibility = View.VISIBLE
+                is ResultWrapper.Success -> {
+                    result.value?.let { adapter.sendListToAdapter(it.results.map {
+                        mapMovieResponseItemToMovieUIModel(it)
+                    }) }
+                    progressBar.visibility = View.GONE
+                }
+                is ResultWrapper.GenericError -> result.error?.let { Log.d("GenericError", it) }
+                is ResultWrapper.NetworkError -> Toast.makeText(requireContext(), "Network Error", Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
 
 
-        homeViewModel.recentFilms.observe(viewLifecycleOwner){
-            if (it != null) {
-                recentsAdapter.sendListToAdapter(it)
-            }
-        }
-        homeViewModel.classics.observe(viewLifecycleOwner){
-            if (it != null) {
-                classicsAdapter.sendListToAdapter(it)
-            }
+        homeViewModel.recentFilms.observe(viewLifecycleOwner) {
+            updateUI(it, recentsAdapter,binding.progressBarRecents)
+            homeViewModel.updateCurrentAndTotalPages(it,MovieListTypes.RECENTS)
         }
 
-        homeViewModel.moderns.observe(viewLifecycleOwner){
-            if (it != null) {
-                modernsAdapter.sendListToAdapter(it)
-            }
+        homeViewModel.classics.observe(viewLifecycleOwner) {
+            updateUI(it, classicsAdapter,binding.progressBarClassics)
+            homeViewModel.updateCurrentAndTotalPages(it,MovieListTypes.CLASSICS)
         }
-        homeViewModel.animations.observe(viewLifecycleOwner){
-            if (it != null) {
-                animationsAdapter.sendListToAdapter(it)
-            }
+
+        homeViewModel.moderns.observe(viewLifecycleOwner) {
+            updateUI(it, modernsAdapter,binding.progressBarModerns)
+            homeViewModel.updateCurrentAndTotalPages(it,MovieListTypes.MODERNS)
+
         }
+        homeViewModel.animations.observe(viewLifecycleOwner) {
+            updateUI(it, animationsAdapter,binding.progressBarAnimations)
+            homeViewModel.updateCurrentAndTotalPages(it,MovieListTypes.ANIMATIONS)
+        }
+
+
+        binding.btnRefresh.setOnClickListener {
+            homeViewModel.refreshMovieLists()
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            homeViewModel.refreshMovieLists()
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
+
+
+
 
 
         homeViewModel.selectedFilm.observe(viewLifecycleOwner){
             if(it!=null) {
                 val bundle = Bundle()
-                bundle.putSerializable("movie", it)
+                val movieDetailObject = mapMovieDetailsResponseItemToMovieDetailUIModel(it)
+                movieDetailObject.isFavorite = favoritesViewModel.isMovieFavorite(movieDetailObject.id) == true
+                bundle.putSerializable("movie", movieDetailObject)
                 findNavController().navigate(R.id.movieFragment, bundle)
             }
         }
 
 
 
-        viewBinding.btnLogout.setOnClickListener {
-            auth.signOut()
-            navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
 
-        }
-
-        return  viewBinding.root
+        return  binding.root
     }
 
 

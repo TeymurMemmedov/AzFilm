@@ -1,4 +1,4 @@
-package com.example.azfilm.ui.activities
+package com.example.azfilm.ui
 
 import androidx.annotation.NavigationRes
 import androidx.lifecycle.MutableLiveData

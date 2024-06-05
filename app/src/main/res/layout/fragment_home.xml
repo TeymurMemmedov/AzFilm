@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <ScrollView
     android:id="@+id/scrollHome"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -6,183 +15,239 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
 
 
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgUser"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuidline"
-        app:shapeAppearanceOverlay="@style/circle_image"
-        android:src="@drawable/img_user_anonym" />
-
-    <TextView
-        android:id="@+id/tvGreeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        app:layout_constraintStart_toEndOf="@+id/imgUser"
-        app:layout_constraintTop_toTopOf="@+id/imgUser"
-        tools:text="Salam, Ceyhun" />
-
-    <TextView
-        android:id="@+id/tvIntro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/home_intro"
-        android:textAppearance="@style/font_12_400"
-        android:textColor="@color/gray_200"
-        app:layout_constraintTop_toBottomOf="@+id/tvGreeting"
-        app:layout_constraintStart_toStartOf="@+id/tvGreeting" />
-
-    <EditText
-        android:id="@+id/evFindMovie"
-        style="@style/ev_find_movie"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Search a film!"
-        android:inputType="text"
-        android:imeOptions="actionSearch"
-        app:layout_constraintEnd_toStartOf="@+id/btSearch"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/imgUser" />
-
-    <ImageButton
-        android:id="@+id/btSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ev_find_movie_bg"
-        android:padding="8dp"
-        android:layout_marginHorizontal="4dp"
-        android:src="@drawable/icon_search"
-        app:layout_constraintBottom_toBottomOf="@+id/evFindMovie"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/evFindMovie"
-        app:tint="@color/white" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/startGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalGuidline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgUser"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/img_user_anonym"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toTopOf="@+id/horizontalGuidline"
+            app:shapeAppearanceOverlay="@style/circle_image" />
 
-    <TextView
-        android:id="@+id/tvRecents"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Recents"
-        android:textAppearance="@style/font_22_800"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/evFindMovie" />
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@+id/imgUser"
+            app:layout_constraintTop_toTopOf="@+id/imgUser"
+            tools:text="Salam, Ceyhun" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRecents"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/tvRecents" />
+        <TextView
+            android:id="@+id/tvIntro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_intro"
+            android:textAppearance="@style/font_12_400"
+            android:textColor="@color/gray_200"
+            app:layout_constraintStart_toStartOf="@+id/tvGreeting"
+            app:layout_constraintTop_toBottomOf="@+id/tvGreeting" />
 
+        <EditText
+            android:id="@+id/evFindMovie"
+            style="@style/ev_find_movie"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Search a film!"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/btSearch"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/imgUser" />
 
-    <TextView
-        android:id="@+id/tvClassics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Classics"
-        android:textAppearance="@style/font_22_800"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/rvRecents" />
+        <ImageButton
+            android:id="@+id/btSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/ev_find_movie_bg"
+            android:padding="8dp"
+            android:src="@drawable/icon_search"
+            app:layout_constraintBottom_toBottomOf="@+id/evFindMovie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/evFindMovie"
+            app:tint="@color/white" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvClassics"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/tvClassics" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
-
-    <TextView
-        android:id="@+id/tvModerns"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Moderns"
-        android:textAppearance="@style/font_22_800"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/rvClassics" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvModerns"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/tvModerns" />
-
-    <TextView
-        android:id="@+id/tvAnimations"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="Animations"
-        android:textAppearance="@style/font_22_800"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/rvModerns" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAnimations"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/tvAnimations" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontalGuidline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.000" />
 
 
-    <ImageButton
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon_logout"
-        app:tint="@color/white"
-        app:backgroundTint="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalGuidline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvRecents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recents"
+            android:textAppearance="@style/font_22_800"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/btnRefresh" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecents"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvRecents" />
+
+
+        <TextView
+            android:id="@+id/tvClassics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="Classics"
+            android:textAppearance="@style/font_22_800"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/rvRecents" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvClassics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvClassics" />
+
+
+        <TextView
+            android:id="@+id/tvModerns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="Moderns"
+            android:textAppearance="@style/font_22_800"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/rvClassics" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvModerns"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvModerns" />
+
+        <TextView
+            android:id="@+id/tvAnimations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="Animations"
+            android:textAppearance="@style/font_22_800"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/rvModerns" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAnimations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvAnimations" />
+
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/btnLogout"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/icon_logout"-->
+<!--            app:backgroundTint="@android:color/transparent"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/horizontalGuidline"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:tint="@color/white" />-->
+
+        <ProgressBar
+            android:id="@+id/progressBarRecents"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            app:layout_constraintBottom_toTopOf="@+id/rvRecents"
+            app:layout_constraintEnd_toEndOf="@+id/rvRecents"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/rvRecents"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <ProgressBar
+            android:id="@+id/progressBarClassics"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            app:layout_constraintBottom_toTopOf="@+id/rvClassics"
+            app:layout_constraintEnd_toEndOf="@+id/rvClassics"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/rvClassics"
+            app:layout_constraintVertical_bias="0.5" />
+
+
+        <ProgressBar
+            android:id="@+id/progressBarModerns"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            app:layout_constraintBottom_toTopOf="@+id/rvModerns"
+            app:layout_constraintEnd_toEndOf="@+id/rvModerns"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/rvModerns"
+            app:layout_constraintVertical_bias="0.5" />
+
+
+        <ProgressBar
+            android:id="@+id/progressBarAnimations"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            app:layout_constraintBottom_toTopOf="@+id/rvAnimations"
+            app:layout_constraintEnd_toEndOf="@+id/rvAnimations"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/rvAnimations"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="8dp"
+            android:text="Refresh"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/evFindMovie" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

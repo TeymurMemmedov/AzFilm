@@ -16,14 +16,14 @@ abstract class BaseFragment<T : ViewBinding>(
 ) : Fragment() {
 
 
-    lateinit var viewBinding: T
+    lateinit var binding: T
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBinding = viewBindingInflater(inflater, container, false)
-        return viewBinding.root
+        binding = viewBindingInflater(inflater, container, false)
+        return binding.root
     }
 }

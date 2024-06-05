@@ -74,15 +74,22 @@
         <item name="android:textFontWeight" tools:targetApi="p">600</item>
     </style>
 
+    <style name="font_32_600">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textFontWeight" tools:targetApi="p">600</item>
+    </style>
+
     <style name="AuthDirectionText" parent="font_14_500"></style>
 
     
     <style name="TextFilmName" parent="font_16_600">
         <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="TextGenreName" parent="font_12_400">
         <item name="android:textColor">@color/gray_200</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="Image_Poster">

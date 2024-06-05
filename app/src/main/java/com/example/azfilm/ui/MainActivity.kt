@@ -1,4 +1,4 @@
-package com.example.azfilm.ui.activities
+package com.example.azfilm.ui
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.example.azfilm.AzFilmApplication
 import com.example.azfilm.R
 import com.example.azfilm.databinding.ActivityMainBinding
+import com.example.azfilm.ui.favorites.FavoritesViewModel
+import com.example.azfilm.ui.favorites.FavoritesViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -20,17 +23,24 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     lateinit var auth : FirebaseAuth
 
+    lateinit var favoritesViewModel:FavoritesViewModel
+
     companion object {
        lateinit var navGraphTracker: NavGraphTrackerViewModel
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MainActivityyy","onCreate")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        deleteDatabase("AzFilmDatabase.db")
+
+        favoritesViewModel = ViewModelProvider(this, FavoritesViewModelFactory(
+            (application as AzFilmApplication).repository
+        ))[FavoritesViewModel::class.java]
 
         navGraphTracker = ViewModelProvider(this)[NavGraphTrackerViewModel::class.java]
 
@@ -38,44 +48,37 @@ class MainActivity : AppCompatActivity() {
         val navHost = supportFragmentManager.findFragmentById(R.id.main_fragment_navhost) as NavHostFragment
         navController = navHost.navController
 
-        binding.bottomNavigationView.apply {
-//            isItemActiveIndicatorEnabled = false
-
-        }
-
-//        binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
-//            val selectedColor = if (menuItem.isChecked) {
-//                ContextCompat.getColorStateList(this,R.color.white)
-//            } else {
-//                ContextCompat.getColorStateList(this,R.color.black)
-//            }
-//            binding.bottomNavigationView.itemIconTintList = selectedColor
-//            true
-//        }
-
-//       binding.bottomNavigationView.setOnItemSelectedListener(object : NavigationBarView.OnItemSelectedListener{
-//           override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//              item.iconTintList = ContextCompat.getColorStateList(this@MainActivity, R.color.white)
-//               return true
-//           }
-//
-//       })
-
         navGraphTracker.navGraphId.observe(this){
             navController.setGraph(it)
-            if(it==R.navigation.main_nav_graph)
+            if(it==R.navigation.main_nav_graph) {
                 binding.bottomNavigationView.visibility = View.VISIBLE
-            else
-                binding.bottomNavigationView.visibility = View.GONE
+                binding.appBar.visibility = View.VISIBLE
 
+            }
+            else{
+                binding.bottomNavigationView.visibility = View.GONE
+                binding.appBar.visibility = View.GONE
+
+            }
         }
 
+
+
         binding.bottomNavigationView.setupWithNavController(navController)
+
+
 
     }
 
     override fun onStart() {
         super.onStart()
+
+        binding.btnLogout.setOnClickListener {
+            auth.signOut()
+            navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
+
+        }
+
         Log.d("MainActivityyy","onStart")
         Log.d("is user null?Start","${auth.currentUser?.email}")
         if(auth.currentUser!=null){

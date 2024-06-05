@@ -1,4 +1,4 @@
-package com.example.azfilm.ui.login
+package com.example.azfilm.ui.auth.login
 
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.azfilm.R
 import com.example.azfilm.databinding.FragmentLoginBinding
-import com.example.azfilm.ui.activities.MainActivity.Companion.navGraphTracker
+import com.example.azfilm.ui.MainActivity.Companion.navGraphTracker
 import com.example.azfilm.base.BaseFragment
 import com.example.azfilm.utils.UIHelper
 import com.google.firebase.auth.FirebaseAuth
@@ -30,7 +30,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>(
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
 
-        viewBinding.apply {
+        binding.apply {
 
             //hideShowPassword
             btnHideOrShowPassword.setOnClickListener {
@@ -46,16 +46,16 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>(
 
 
         viewModel.emailError.observe(viewLifecycleOwner) { error ->
-            viewBinding.evEmail.error = error
+            binding.evEmail.error = error
         }
 
         viewModel.passwordError.observe(viewLifecycleOwner) { error ->
-            viewBinding.evPassword.error = error
+            binding.evPassword.error = error
         }
 
-        viewBinding.btnSubmit.setOnClickListener {
-            val email = viewBinding.evEmail.text.toString()
-            val password = viewBinding.evPassword.text.toString()
+        binding.btnSubmit.setOnClickListener {
+            val email = binding.evEmail.text.toString()
+            val password = binding.evPassword.text.toString()
 
             if (viewModel.validateFields(email, password)) {
                 // Validation passed, proceed with authentication

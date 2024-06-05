@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tvMovieGenres"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toTopOf="@id/tvMovieName"
-        app:tint="@color/red_500" />
+        />
 
 
     <TextView
