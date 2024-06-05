@@ -70,26 +70,26 @@ class HomeViewModel(
 
 
     suspend private fun getRecents(page:Int = 1) {
-        val recents = safeApiCall(Dispatchers.IO) { movieService.getRecents(page) }
+        val recents = movieRepository.getRecents(page)
             _recentFilms.postValue(recents)
     }
 
     suspend private fun getClassics(page:Int = 1) {
-        val modern = safeApiCall(Dispatchers.IO) { movieService.getClassics(page) }
+        val modern = movieRepository.getClassics(page)
         _classics.postValue(modern)
     }
 
     suspend private fun getModerns(page:Int = 1) {
-        val classics = safeApiCall(Dispatchers.IO) { movieService.getModerns(page) }
+        val classics = movieRepository.getModerns(page)
         _moderns.postValue(classics)
     }
 
     suspend private fun getAnimations(page:Int = 1) {
-        val animations = safeApiCall(Dispatchers.IO) { movieService.getAnimations(page) }
+        val animations = movieRepository.getAnimations(page)
         _animations.postValue(animations)
     }
 
-    fun generateRandomPageNumber(
+    private fun generateRandomPageNumber(
         movieListTypes: MovieListTypes
     ):Int{
 

@@ -1,18 +1,19 @@
 package com.example.azfilm.ui.movie
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.azfilm.api.RetrofitInstance
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.azfilm.api.serviceModels.MovieDetailsResponseItem
+import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
 import com.example.azfilm.ui.uiModels.MovieDetailUIModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class MovieViewModel: ViewModel() {
+class MovieViewModel(val movieRepository: MovieRepository) : ViewModel() {
 
     private val _selectedFilm = MutableLiveData<MovieDetailUIModel?>()
     val selectedFilm: LiveData<MovieDetailUIModel?> = _selectedFilm
@@ -22,46 +23,53 @@ class MovieViewModel: ViewModel() {
     }
 
     fun changeFavoritStateOfSelectedFilm(){
-       _selectedFilm.postValue(
-           _selectedFilm.value?.isFavorite?.not()?.let {
-               _selectedFilm.value?.copy(
-                   isFavorite = it
-               )
-           }
-       )
+        val currentSelectedFilm = _selectedFilm.value
+        val currentState = currentSelectedFilm?.isFavorite
+
+        if (currentState != null) {
+            _selectedFilm.postValue(
+               currentSelectedFilm.copy(
+                    isFavorite =  currentState.not()
+                )
+
+            )
+        }
+    }
+
+    fun setInitialFavoriteState(){
+        val currentFilm = _selectedFilm.value
+        if (currentFilm != null) {
+            _selectedFilm.postValue(
+                currentFilm.copy(
+                    isFavorite = movieRepository.isFavoriteMovie(currentFilm.id)
+                )
+            )
+        }
     }
 
 
 
-    fun getMovieById(id: Int): MovieDetailsResponseItem? {
-        var resultMovie: MovieDetailsResponseItem? = null
-        val response = RetrofitInstance.api.getMovieById(id).enqueue(
-            object: Callback<MovieDetailsResponseItem> {
-                override fun onResponse(
-                    p0: Call<MovieDetailsResponseItem>,
-                    response: Response<MovieDetailsResponseItem>
-                ) {
-                    response.body()?.let { moviesResponse ->
-                        resultMovie= moviesResponse
+     fun getMovieById(id: Int) {
 
-                        _selectedFilm.value =mapMovieDetailsResponseItemToMovieDetailUIModel(
-                            resultMovie!!
-                        )
-                    }
-
-                    if (!response.isSuccessful) {
-                        Log.d("apiError", "${response.errorBody()}")
-                        Log.d("Code", "${response.code()}")
-                    }
+        viewModelScope.launch(Dispatchers.IO) {
+            val response =  movieRepository.getMovieById(id)
+            if(response.isSuccessful){
+                if(response.body()!=null){
+                    val movie = mapMovieDetailsResponseItemToMovieDetailUIModel(
+                        response.body()!!
+                    )
+                    _selectedFilm.postValue(movie)
                 }
-
-                override fun onFailure(p0: Call<MovieDetailsResponseItem>, response: Throwable) {
-                    Log.d("NoRespond", "${response.message}")
-                }
-
             }
-        )
-        return resultMovie
+        }
 
+    }
+}
+
+class MovieViewModelFactory(
+    val movieRepository: MovieRepository
+) : ViewModelProvider.Factory{
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return MovieViewModel(movieRepository) as T
     }
 }

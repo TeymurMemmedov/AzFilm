@@ -70,25 +70,36 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
 
         }
 
+        binding.btnAddOrRemoveToFavorites.setOnClickListener {
+            movieViewModel.changeFavoritStateOfSelectedFilm()
+        }
 
-        movieViewModel.selectedFilm.observe(viewLifecycleOwner){
-            if (it != null) {
-                if(it.isFavorite){
-                    favoritesViewModel.addMovieToFavorites(
-                        mapMovieDetailUIModelToFavoriteMovie(it)
-                    )
+
+        movieViewModel.selectedFilm.observe(viewLifecycleOwner){ movie ->
+            if (movie != null) {
+                if(movie.isFavorite){
+
+                        favoritesViewModel.addMovieToFavorites(
+                            mapMovieDetailUIModelToFavoriteMovie(movie)
+                        )
+
+
 
                     binding.btnAddOrRemoveToFavorites.setImageResource(
                         R.drawable.icon_favorite_filled
                     )
+
                 }
                 else{
-                    favoritesViewModel.removeMovieFromFavorites(
-                        mapMovieDetailUIModelToFavoriteMovie(it)
-                    )
+                        favoritesViewModel.removeMovieFromFavorites(
+                            mapMovieDetailUIModelToFavoriteMovie(movie)
+                        )
+
+
                     binding.btnAddOrRemoveToFavorites.setImageResource(
                         R.drawable.icon_not_favorite_filled
                     )
+
                 }
 
             }

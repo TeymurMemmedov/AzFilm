@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -32,6 +33,8 @@ import com.example.azfilm.utils.MovieListTypes
 import com.example.azfilm.utils.ResultWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeFragment: BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
@@ -43,8 +46,9 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
     var user: FirebaseUser? = null
 
     val homeFilmClickListener:(MovieUIModel)->Unit = {
-        movieViewModel.getMovieById(it.id)
+            movieViewModel.getMovieById(it.id)
     }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +57,6 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         Log.d("HomeFragment","onCreate")
         homeViewModel = ViewModelProvider(this,
             HomeViewModelFactory((requireActivity().application as AzFilmApplication).repository))[HomeViewModel::class.java]
-
 
         favoritesViewModel = ViewModelProvider(requireActivity()).get(FavoritesViewModel::class.java)
 
@@ -172,10 +175,10 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 
 
         movieViewModel.selectedFilm.observe(viewLifecycleOwner){
+
             if(it!=null) {
+                movieViewModel.setInitialFavoriteState()
                 val bundle = Bundle()
-//                val movieDetailObject = mapMovieDetailsResponseItemToMovieDetailUIModel(it)
-                it.isFavorite = favoritesViewModel.isMovieFavorite(it.id) == true
                 bundle.putSerializable("movie", it)
                 findNavController().navigate(R.id.movieFragment, bundle)
             }
