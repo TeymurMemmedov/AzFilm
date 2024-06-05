@@ -23,10 +23,12 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
         lateinit var movie: MovieDetailUIModel
 
         lateinit var favoritesViewModel: FavoritesViewModel
+        lateinit var movieViewModel: MovieViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         favoritesViewModel = ViewModelProvider(requireActivity()).get(FavoritesViewModel::class.java)
+        movieViewModel = ViewModelProvider(requireActivity()).get(MovieViewModel::class.java)
 
     }
     override fun onCreateView(
@@ -36,8 +38,7 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         movie = arguments?.getSerializable("movie") as MovieDetailUIModel
-//        val hour = movie.runtime/60
-//        val minute = movie.runtime - (hour*60)
+
 
         binding.apply {
 
@@ -49,21 +50,48 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
             tvDuration.text = movie.duration
 
 
-
-            btnAddOrRemoveToFavorites.setImageResource(
-                if(movie.isFavorite) R.drawable.icon_favorite_filled
-                else R.drawable.icon_favorite
-            )
-
             btnAddOrRemoveToFavorites.setOnClickListener {
-                favoritesViewModel.addMovieToFavorites(
-                    mapMovieDetailUIModelToFavoriteMovie(movie)
-                )
+                movieViewModel.changeFavoritStateOfSelectedFilm()
             }
 
 
 
+//            btnAddOrRemoveToFavorites.setImageResource(
+//                if(movie.isFavorite) R.drawable.icon_favorite_filled
+//                else R.drawable.icon_favorite
+//            )
+//
+//            btnAddOrRemoveToFavorites.setOnClickListener {
+//                favoritesViewModel.addMovieToFavorites(
+//                    mapMovieDetailUIModelToFavoriteMovie(movie)
+//                )
+//            }
 
+
+        }
+
+
+        movieViewModel.selectedFilm.observe(viewLifecycleOwner){
+            if (it != null) {
+                if(it.isFavorite){
+                    favoritesViewModel.addMovieToFavorites(
+                        mapMovieDetailUIModelToFavoriteMovie(it)
+                    )
+
+                    binding.btnAddOrRemoveToFavorites.setImageResource(
+                        R.drawable.icon_favorite_filled
+                    )
+                }
+                else{
+                    favoritesViewModel.removeMovieFromFavorites(
+                        mapMovieDetailUIModelToFavoriteMovie(it)
+                    )
+                    binding.btnAddOrRemoveToFavorites.setImageResource(
+                        R.drawable.icon_not_favorite_filled
+                    )
+                }
+
+            }
         }
 
         return  binding.root

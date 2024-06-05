@@ -25,6 +25,7 @@ import com.example.azfilm.base.BasePagingResponse
 import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
 import com.example.azfilm.data.mapper.mapMovieResponseItemToMovieUIModel
 import com.example.azfilm.ui.favorites.FavoritesViewModel
+import com.example.azfilm.ui.movie.MovieViewModel
 import com.example.azfilm.ui.uiModels.MovieUIModel
 import com.example.azfilm.utils.MovieHelper.Companion.generateImageFullPath
 import com.example.azfilm.utils.MovieListTypes
@@ -38,10 +39,11 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
     lateinit var auth: FirebaseAuth
     lateinit var homeViewModel: HomeViewModel
     lateinit var favoritesViewModel: FavoritesViewModel
+    lateinit var movieViewModel: MovieViewModel
     var user: FirebaseUser? = null
 
     val homeFilmClickListener:(MovieUIModel)->Unit = {
-        homeViewModel.getMovieById(it.id)
+        movieViewModel.getMovieById(it.id)
     }
 
 
@@ -55,6 +57,8 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 
         favoritesViewModel = ViewModelProvider(requireActivity()).get(FavoritesViewModel::class.java)
 
+        movieViewModel = ViewModelProvider(requireActivity()).get(MovieViewModel::class.java)
+
     }
 
     override fun onCreateView(
@@ -66,7 +70,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         user = auth.currentUser
         Log.d("HomeFragment","onCreateView")
 
-        homeViewModel.setNullToSelectedFilm()
+        movieViewModel.setNullToSelectedFilm()
 
         binding.tvGreeting.text = "Hello, ${user?.displayName}"
 
@@ -167,12 +171,12 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 
 
 
-        homeViewModel.selectedFilm.observe(viewLifecycleOwner){
+        movieViewModel.selectedFilm.observe(viewLifecycleOwner){
             if(it!=null) {
                 val bundle = Bundle()
-                val movieDetailObject = mapMovieDetailsResponseItemToMovieDetailUIModel(it)
-                movieDetailObject.isFavorite = favoritesViewModel.isMovieFavorite(movieDetailObject.id) == true
-                bundle.putSerializable("movie", movieDetailObject)
+//                val movieDetailObject = mapMovieDetailsResponseItemToMovieDetailUIModel(it)
+                it.isFavorite = favoritesViewModel.isMovieFavorite(it.id) == true
+                bundle.putSerializable("movie", it)
                 findNavController().navigate(R.id.movieFragment, bundle)
             }
         }

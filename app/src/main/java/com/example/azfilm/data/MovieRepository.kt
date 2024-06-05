@@ -10,9 +10,6 @@ class MovieRepository(
 
     val favoriteMovies: Flow<List<FavoriteMovie>> = movieDao.getAllFavoriteMovies()
 
-//    suspend fun getAllFavoriteMovies(): List<FavoriteMovie> {
-//        return movieDao.getAllFavoriteMovies()
-//    }
 
     // Add a movie to the favorites
     suspend fun addMovieToFavorites(movie: FavoriteMovie) {

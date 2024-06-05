@@ -6,18 +6,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.azfilm.api.RetrofitInstance
 import com.example.azfilm.api.serviceModels.MovieDetailsResponseItem
+import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
+import com.example.azfilm.ui.uiModels.MovieDetailUIModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MovieViewModel: ViewModel() {
 
-    private val _selectedFilm = MutableLiveData<MovieDetailsResponseItem?>()
-    val selectedFilm: LiveData<MovieDetailsResponseItem?> = _selectedFilm
+    private val _selectedFilm = MutableLiveData<MovieDetailUIModel?>()
+    val selectedFilm: LiveData<MovieDetailUIModel?> = _selectedFilm
 
     fun setNullToSelectedFilm() {
         _selectedFilm.value = null
     }
+
+    fun changeFavoritStateOfSelectedFilm(){
+       _selectedFilm.postValue(
+           _selectedFilm.value?.isFavorite?.not()?.let {
+               _selectedFilm.value?.copy(
+                   isFavorite = it
+               )
+           }
+       )
+    }
+
+
 
     fun getMovieById(id: Int): MovieDetailsResponseItem? {
         var resultMovie: MovieDetailsResponseItem? = null
@@ -29,7 +43,10 @@ class MovieViewModel: ViewModel() {
                 ) {
                     response.body()?.let { moviesResponse ->
                         resultMovie= moviesResponse
-                        _selectedFilm.value = resultMovie
+
+                        _selectedFilm.value =mapMovieDetailsResponseItemToMovieDetailUIModel(
+                            resultMovie!!
+                        )
                     }
 
                     if (!response.isSuccessful) {

@@ -11,19 +11,12 @@ class FavoritesViewModel(
 //
 //    private val _favoriteMovies = MutableLiveData<List<FavoriteMovie>>()
 //    val favoriteMovies: LiveData<List<FavoriteMovie>> get() = _favoriteMovies
-    val favoriteMovies: LiveData<List<FavoriteMovie>> = movieRepository.favoriteMovies.asLiveData()
+   lateinit var favoriteMovies:  LiveData<List<FavoriteMovie>>
 
-//    init {
-//        loadFavoriteMovies()
-//    }
+    init {
+        favoriteMovies = movieRepository.favoriteMovies.asLiveData()
+    }
 
-    // Load all favorite movies from the database
-//    private fun loadFavoriteMovies() {
-//        viewModelScope.launch {
-//            val movies = movieRepository.getAllFavoriteMovies()
-//            _favoriteMovies.postValue(movies)
-//        }
-//    }
 
     fun isMovieFavorite(movieId:Int): Boolean? {
         return favoriteMovies.value?.any {
@@ -35,7 +28,6 @@ class FavoritesViewModel(
     fun addMovieToFavorites(movie: FavoriteMovie) {
         viewModelScope.launch {
             movieRepository.addMovieToFavorites(movie)
-//            loadFavoriteMovies() // Refresh the favorite movies list
         }
     }
 
@@ -43,7 +35,6 @@ class FavoritesViewModel(
     fun removeMovieFromFavorites(movie: FavoriteMovie) {
         viewModelScope.launch {
             movieRepository.removeMovieFromFavorites(movie)
-//            loadFavoriteMovies() // Refresh the favorite movies list
         }
     }
 

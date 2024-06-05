@@ -15,6 +15,7 @@ import com.example.azfilm.R
 import com.example.azfilm.databinding.ActivityMainBinding
 import com.example.azfilm.ui.favorites.FavoritesViewModel
 import com.example.azfilm.ui.favorites.FavoritesViewModelFactory
+import com.example.azfilm.ui.movie.MovieViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var auth : FirebaseAuth
 
     lateinit var favoritesViewModel:FavoritesViewModel
+    lateinit var movieViewModel: MovieViewModel
 
     companion object {
        lateinit var navGraphTracker: NavGraphTrackerViewModel
@@ -36,11 +38,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        deleteDatabase("AzFilmDatabase.db")
 
         favoritesViewModel = ViewModelProvider(this, FavoritesViewModelFactory(
             (application as AzFilmApplication).repository
         ))[FavoritesViewModel::class.java]
+
+        movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
 
         navGraphTracker = ViewModelProvider(this)[NavGraphTrackerViewModel::class.java]
 
