@@ -1,28 +1,24 @@
 package com.example.azfilm.ui.home
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.azfilm.api.RetrofitInstance
-import com.example.azfilm.api.serviceModels.MovieDetailsResponseItem
 import com.example.azfilm.api.serviceModels.MovieResponseItem
 import com.example.azfilm.base.BasePagingResponse
 import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.utils.MovieListTypes
 import com.example.azfilm.utils.ResultWrapper
-import com.example.azfilm.utils.safeApiCall
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.random.Random
+import javax.inject.Inject
 
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel()
 {
@@ -59,35 +55,88 @@ class HomeViewModel(
             currentPage[type] = 0
             totalPages[type] = 0
             }
-
-        viewModelScope.launch(Dispatchers.IO) {
             getRecents()
             getClassics()
             getModerns()
             getAnimations()
+
         }
-    }
+
+//         suspend private fun getRecents(page:Int = 1) {
+//            Log.d("Fetch Status","RecentsStarted")
+//            val recents = movieRepository.getRecents(page)
+//            _recentFilms.postValue(recents)
+//            Log.d("Fetch Status","RecentsEnded")
+//
+//         }
+//
+//    suspend private fun getClassics(page:Int = 1) {
+//        Log.d("Fetch Status","RecentsStarted")
+//        val recents = movieRepository.getClassics(page)
+//        _recentFilms.postValue(recents)
+//        Log.d("Fetch Status","RecentsEnded")
+//
+//    }
+//
+//    suspend private fun getModerns(page:Int = 1) {
+//        Log.d("Fetch Status","RecentsStarted")
+//        val recents = movieRepository.getModerns(page)
+//        _recentFilms.postValue(recents)
+//        Log.d("Fetch Status","RecentsEnded")
+//
+//    }
+//
+//    suspend private fun getAnimations(page:Int = 1) {
+//        Log.d("Fetch Status","RecentsStarted")
+//        val recents = movieRepository.getAnimations(page)
+//        _recentFilms.postValue(recents)
+//        Log.d("Fetch Status","RecentsEnded")
+//
+//    }
 
 
-    suspend private fun getRecents(page:Int = 1) {
-        val recents = movieRepository.getRecents(page)
+
+
+     private fun getRecents(page:Int = 1) {
+        viewModelScope.launch {
+            Log.d("Fetch Status","RecentsStarted")
+            val recents = movieRepository.getRecents(page)
             _recentFilms.postValue(recents)
+            Log.d("Fetch Status","RecentsEnded")
+        }
+
     }
 
-    suspend private fun getClassics(page:Int = 1) {
-        val modern = movieRepository.getClassics(page)
-        _classics.postValue(modern)
+     private fun getClassics(page:Int = 1) {
+        viewModelScope.launch {
+            Log.d("Fetch Status","ClassicsStarted")
+            val modern = movieRepository.getClassics(page)
+            _classics.postValue(modern)
+            Log.d("Fetch Status","ClassicsEnded")
+        }
+
     }
 
-    suspend private fun getModerns(page:Int = 1) {
-        val classics = movieRepository.getModerns(page)
-        _moderns.postValue(classics)
+     private fun getModerns(page:Int = 1) {
+        viewModelScope.launch {
+            Log.d("Fetch Status","ModernsStarted")
+            val classics = movieRepository.getModerns(page)
+            _moderns.postValue(classics)
+            Log.d("Fetch Status","ModernsEnded")
+        }
+
     }
 
-    suspend private fun getAnimations(page:Int = 1) {
-        val animations = movieRepository.getAnimations(page)
-        _animations.postValue(animations)
+     private fun getAnimations(page:Int = 1) {
+        viewModelScope.launch {
+            Log.d("Fetch Status","AnimationsStarted")
+            val animations = movieRepository.getAnimations(page)
+            _animations.postValue(animations)
+            Log.d("Fetch Status","AnimationsEnded")
+        }
+
     }
+
 
     private fun generateRandomPageNumber(
         movieListTypes: MovieListTypes

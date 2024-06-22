@@ -1,42 +1,86 @@
 package com.example.azfilm.ui.auth
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.azfilm.data.UserRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.example.azfilm.utils.ResultWrapper
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthViewModel(
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     private  val userRepository: UserRepository
 
 ): ViewModel() {
 
-    suspend fun register(
-        username: String,
-        email: String,
-        password: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        userRepository.registerWithEmail(username,email,password,onSuccess,onFailure)
+    private val _usernameError = MutableLiveData<String?>(null)
+    val usernameError: LiveData<String?> = _usernameError
+
+    private val _emailError = MutableLiveData<String?>(null)
+    val emailError: LiveData<String?> = _emailError
+
+    private val _passwordError = MutableLiveData<String?>(null)
+    val passwordError: LiveData<String?> = _passwordError
+
+
+    private val _registrationResult = MutableLiveData<ResultWrapper<Unit>>()
+    val registrationResult: LiveData<ResultWrapper<Unit>> = _registrationResult
+
+    private val _loginResult = MutableLiveData<ResultWrapper<Unit>>()
+    val loginResult: LiveData<ResultWrapper<Unit>> = _loginResult
+
+
+    fun validateFields(username:String?,email:String?,password:String?):Boolean {
+        var isValid = true
+
+        if (username?.isBlank() == true) {
+            _usernameError.value = "Email must be entered"
+            isValid = false
+        }
+
+        if (email?.isBlank()==true) {
+            _emailError.value = "Email must be entered"
+            isValid = false
+        }
+
+        if (password?.isBlank()==true) {
+            _passwordError.value = "Password must be entered"
+            isValid = false
+        }
+
+        return  isValid
     }
 
-    suspend fun login(
-        email: String,
-        password: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ){
-        userRepository.signInWithEmailAndPassword(email,password,onSuccess,onFailure)
+
+    fun resetErrors(){
+        _emailError.value = null
+        _passwordError.value = null
+        _usernameError.value = null
+    }
+
+    fun registerUser(username: String, email: String, password: String) {
+        viewModelScope.launch {
+            _registrationResult.postValue(ResultWrapper.Loading)
+            val result = userRepository.registerWithEmail(username, email, password)
+            _registrationResult.postValue(result)
+        }
+    }
+
+    fun signInUser(email: String, password: String) {
+        viewModelScope.launch {
+            _registrationResult.postValue(ResultWrapper.Loading)
+            val result = userRepository.signInWithEmailAndPassword(email, password)
+            _loginResult.postValue(result)
+        }
+    }
+
+    fun signOut(){
+        userRepository.signOut()
     }
 
 }
 
 
-class AuthViewModelFactory(
-    private val userRepository: UserRepository
-):ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AuthViewModel(userRepository) as T
-    }
-}

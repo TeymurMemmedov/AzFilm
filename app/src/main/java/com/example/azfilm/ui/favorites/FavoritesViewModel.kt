@@ -3,19 +3,18 @@ package com.example.azfilm.ui.favorites
 import androidx.lifecycle.*
 import com.example.azfilm.data.FavoriteMovie
 import com.example.azfilm.data.MovieRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoritesViewModel(
+@HiltViewModel
+class FavoritesViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : ViewModel() {
 //
 //    private val _favoriteMovies = MutableLiveData<List<FavoriteMovie>>()
 //    val favoriteMovies: LiveData<List<FavoriteMovie>> get() = _favoriteMovies
-   lateinit var favoriteMovies:  LiveData<List<FavoriteMovie>>
-
-    init {
-        favoriteMovies = movieRepository.favoriteMovies.asLiveData()
-    }
+var favoriteMovies:  LiveData<List<FavoriteMovie>> = movieRepository.favoriteMovies.asLiveData()
 
 
     fun isMovieFavorite(movieId:Int): Boolean? {
@@ -41,11 +40,4 @@ class FavoritesViewModel(
 
 }
 
-class FavoritesViewModelFactory(
-    private val movieRepository: MovieRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return  FavoritesViewModel(movieRepository) as T
-    }
-}
 

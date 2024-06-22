@@ -2,7 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
-    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -73,10 +74,17 @@ dependencies {
     //interceptors
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    ksp("androidx.room:room-compiler:$room_version")
+
 
     //logging interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    //hilt
+
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
+
+    kapt("androidx.room:room-compiler:$room_version")
 
     
     implementation("io.coil-kt:coil:2.6.0")

@@ -4,33 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import coil.load
 import com.example.azfilm.R
-import com.example.azfilm.databinding.FragmentMovieBinding
 import com.example.azfilm.base.BaseFragment
 import com.example.azfilm.data.mapper.mapMovieDetailUIModelToFavoriteMovie
-import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToFavoriteMovie
-import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
+import com.example.azfilm.databinding.FragmentMovieBinding
 import com.example.azfilm.ui.favorites.FavoritesViewModel
 import com.example.azfilm.ui.uiModels.MovieDetailUIModel
-import com.example.azfilm.utils.MovieHelper
-import com.example.azfilm.utils.PosterSizes
+import com.example.azfilm.utils.MovieHelper.Companion.generateImageFullPath
 
 class MovieFragment: BaseFragment<FragmentMovieBinding>
     (FragmentMovieBinding::inflate){
 
         lateinit var movie: MovieDetailUIModel
 
-        lateinit var favoritesViewModel: FavoritesViewModel
-        lateinit var movieViewModel: MovieViewModel
+        val favoritesViewModel: FavoritesViewModel by activityViewModels()
+        val movieViewModel: MovieViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        favoritesViewModel = ViewModelProvider(requireActivity()).get(FavoritesViewModel::class.java)
-        movieViewModel = ViewModelProvider(requireActivity()).get(MovieViewModel::class.java)
 
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,9 +34,10 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
 
         binding.apply {
 
-            imgMovie.load("${MovieHelper.tmdbImageBaseUrl}${PosterSizes.W_500.printableName}${movie.backdropPath}")
+
+            imgMovie.load(movie.backdropPath.generateImageFullPath())
             tvMovieName.text = movie.title
-//            tvMovieGenres.text = movie.genreIds.joinToString { it.name }
+            tvMovieGenres.text = movie.genres.joinToString()
             tvOverview.text = movie.overview
             tvReleaseDate.text = movie.releaseDate
             tvDuration.text = movie.duration
@@ -56,16 +49,7 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
 
 
 
-//            btnAddOrRemoveToFavorites.setImageResource(
-//                if(movie.isFavorite) R.drawable.icon_favorite_filled
-//                else R.drawable.icon_favorite
-//            )
-//
-//            btnAddOrRemoveToFavorites.setOnClickListener {
-//                favoritesViewModel.addMovieToFavorites(
-//                    mapMovieDetailUIModelToFavoriteMovie(movie)
-//                )
-//            }
+
 
 
         }
@@ -79,11 +63,9 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
             if (movie != null) {
                 if(movie.isFavorite){
 
-                        favoritesViewModel.addMovieToFavorites(
-                            mapMovieDetailUIModelToFavoriteMovie(movie)
-                        )
-
-
+                    favoritesViewModel.addMovieToFavorites(
+                        mapMovieDetailUIModelToFavoriteMovie(movie)
+                    )
 
                     binding.btnAddOrRemoveToFavorites.setImageResource(
                         R.drawable.icon_favorite_filled
@@ -91,9 +73,9 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
 
                 }
                 else{
-                        favoritesViewModel.removeMovieFromFavorites(
-                            mapMovieDetailUIModelToFavoriteMovie(movie)
-                        )
+                    favoritesViewModel.removeMovieFromFavorites(
+                        mapMovieDetailUIModelToFavoriteMovie(movie)
+                    )
 
 
                     binding.btnAddOrRemoveToFavorites.setImageResource(
