@@ -1,56 +1,43 @@
 package com.example.azfilm.data
 
+import com.example.azfilm.utils.ResultWrapper
+import com.example.azfilm.utils.safeApiCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class UserRepository(
-    private val auth: FirebaseAuth
+class UserRepository @Inject constructor(
+    private val auth: FirebaseAuth,
 ) {
-
-
 
     suspend fun registerWithEmail(
         username: String,
         email: String,
-        password: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // User created successfully, set username
-                    val firebaseUser = auth.currentUser
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(username)
-                        .build()
-
-                    firebaseUser?.updateProfile(profileUpdates)
-                        ?.addOnCompleteListener { profileTask ->
-                            if (profileTask.isSuccessful) {
-                                onSuccess()
-                            } else {
-                                onFailure(profileTask.exception?.message ?: "Failed to update profile.")
-                            }
-                        }
-                } else {
-                    onFailure(task.exception?.message ?: "Authentication failed.")
-                }
-            }
+        password: String
+    ): ResultWrapper<Unit> {
+        return safeApiCall(Dispatchers.IO) {
+            auth.createUserWithEmailAndPassword(email, password).await()
+            val firebaseUser = auth.currentUser
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(username)
+                .build()
+            firebaseUser?.updateProfile(profileUpdates)?.await()
+        }
     }
 
     suspend fun signInWithEmailAndPassword(
         email: String,
-        password: String,
-        onSuccess: () -> Unit,
-        onFailure: (String) -> Unit) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    onSuccess()
-                } else {
-                    onFailure(task.exception?.message ?: "Authentication failed.")
-                }
-            }
+        password: String
+    ): ResultWrapper<Unit> {
+        return safeApiCall(Dispatchers.IO) {
+            auth.signInWithEmailAndPassword(email, password).await()
+        }
+    }
+
+
+    fun signOut(){
+        auth.signOut()
     }
 }

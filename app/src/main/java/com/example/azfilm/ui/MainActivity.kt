@@ -1,32 +1,37 @@
 package com.example.azfilm.ui
 
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.annotation.RequiresApi
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.azfilm.AzFilmApplication
 import com.example.azfilm.R
 import com.example.azfilm.databinding.ActivityMainBinding
+import com.example.azfilm.ui.auth.AuthViewModel
 import com.example.azfilm.ui.favorites.FavoritesViewModel
-import com.example.azfilm.ui.favorites.FavoritesViewModelFactory
 import com.example.azfilm.ui.movie.MovieViewModel
-import com.example.azfilm.ui.movie.MovieViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
-    lateinit var auth : FirebaseAuth
 
-    lateinit var favoritesViewModel:FavoritesViewModel
-    lateinit var movieViewModel: MovieViewModel
+    @Inject
+    lateinit var auth: FirebaseAuth
+
+
+    val authViewModel: AuthViewModel by viewModels()
+    val favoritesViewModel: FavoritesViewModel by viewModels()
+    val movieViewModel :MovieViewModel by viewModels()
 
     companion object {
        lateinit var navGraphTracker: NavGraphTrackerViewModel
@@ -40,24 +45,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        favoritesViewModel = ViewModelProvider(this, FavoritesViewModelFactory(
-            (application as AzFilmApplication).repository
-        ))[FavoritesViewModel::class.java]
-
-        movieViewModel = ViewModelProvider(this,
-            MovieViewModelFactory(
-                (application as AzFilmApplication).repository
-            ))[MovieViewModel::class.java]
-
         navGraphTracker = ViewModelProvider(this)[NavGraphTrackerViewModel::class.java]
 
-        auth = FirebaseAuth.getInstance()
         val navHost = supportFragmentManager.findFragmentById(R.id.main_fragment_navhost) as NavHostFragment
         navController = navHost.navController
 
         navGraphTracker.navGraphId.observe(this){
             navController.setGraph(it)
-            if(it==R.navigation.main_nav_graph) {
+            if(it== R.navigation.main_nav_graph) {
                 binding.bottomNavigationView.visibility = View.VISIBLE
                 binding.appBar.visibility = View.VISIBLE
 
@@ -69,9 +64,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
         binding.bottomNavigationView.setupWithNavController(navController)
+        
 
 
 
@@ -81,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         binding.btnLogout.setOnClickListener {
-            auth.signOut()
+            authViewModel.signOut()
             navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
 
         }

@@ -1,6 +1,5 @@
 package com.example.azfilm.ui.home
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,24 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import com.example.azfilm.AzFilmApplication
 import com.example.azfilm.R
 import com.example.azfilm.api.serviceModels.MovieResponseItem
-import com.example.azfilm.databinding.FragmentHomeBinding
-import com.example.azfilm.databinding.RvMovieWithPosterBinding
-import com.example.azfilm.ui.MainActivity.Companion.navGraphTracker
-import com.example.azfilm.ui.adapters.GenericRvAdapter
 import com.example.azfilm.base.BaseFragment
 import com.example.azfilm.base.BasePagingResponse
-import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
 import com.example.azfilm.data.mapper.mapMovieResponseItemToMovieUIModel
-import com.example.azfilm.ui.favorites.FavoritesViewModel
+import com.example.azfilm.databinding.FragmentHomeBinding
+import com.example.azfilm.databinding.RvMovieWithPosterBinding
+import com.example.azfilm.ui.adapters.GenericRvAdapter
 import com.example.azfilm.ui.movie.MovieViewModel
 import com.example.azfilm.ui.uiModels.MovieUIModel
 import com.example.azfilm.utils.MovieHelper.Companion.generateImageFullPath
@@ -33,34 +27,27 @@ import com.example.azfilm.utils.MovieListTypes
 import com.example.azfilm.utils.ResultWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment: BaseFragment<FragmentHomeBinding>(
     FragmentHomeBinding::inflate
 ) {
+    @Inject
     lateinit var auth: FirebaseAuth
-    lateinit var homeViewModel: HomeViewModel
-    lateinit var favoritesViewModel: FavoritesViewModel
-    lateinit var movieViewModel: MovieViewModel
-    var user: FirebaseUser? = null
+
+     private val  homeViewModel: HomeViewModel by viewModels()
+     private val  movieViewModel: MovieViewModel by activityViewModels()
+     private var  user: FirebaseUser? = null
 
     val homeFilmClickListener:(MovieUIModel)->Unit = {
             movieViewModel.getMovieById(it.id)
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
         Log.d("HomeFragment","onCreate")
-        homeViewModel = ViewModelProvider(this,
-            HomeViewModelFactory((requireActivity().application as AzFilmApplication).repository))[HomeViewModel::class.java]
-
-        favoritesViewModel = ViewModelProvider(requireActivity()).get(FavoritesViewModel::class.java)
-
-        movieViewModel = ViewModelProvider(requireActivity()).get(MovieViewModel::class.java)
 
     }
 

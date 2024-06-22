@@ -3,17 +3,18 @@ package com.example.azfilm.ui.movie
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.azfilm.api.serviceModels.MovieDetailsResponseItem
 import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
 import com.example.azfilm.ui.uiModels.MovieDetailUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieViewModel(val movieRepository: MovieRepository) : ViewModel() {
+@HiltViewModel
+class MovieViewModel @Inject constructor(
+    val movieRepository: MovieRepository) : ViewModel() {
 
     private val _selectedFilm = MutableLiveData<MovieDetailUIModel?>()
     val selectedFilm: LiveData<MovieDetailUIModel?> = _selectedFilm
@@ -66,10 +67,10 @@ class MovieViewModel(val movieRepository: MovieRepository) : ViewModel() {
     }
 }
 
-class MovieViewModelFactory(
-    val movieRepository: MovieRepository
-) : ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MovieViewModel(movieRepository) as T
-    }
-}
+//class MovieViewModelFactory(
+//    val movieRepository: MovieRepository
+//) : ViewModelProvider.Factory{
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        return MovieViewModel(movieRepository) as T
+//    }
+//}
