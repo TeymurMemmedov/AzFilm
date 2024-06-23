@@ -20,8 +20,10 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
     private  val favoritesViewModel: FavoritesViewModel by activityViewModels()
     private lateinit var favoritesAdapter: GenericRvAdapter<FavoriteMovie,RvItemFavoritesBinding>
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        println()
 
 
 
