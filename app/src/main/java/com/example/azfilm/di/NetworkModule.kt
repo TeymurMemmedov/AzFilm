@@ -3,6 +3,7 @@ package com.example.azfilm.di
 import com.example.azfilm.api.MovieService
 import com.example.azfilm.api.interceptors.APIKeyInterceptor
 import com.example.azfilm.api.interceptors.CustomInterceptor
+import com.example.azfilm.utils.SecretsFile
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,7 +60,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiKeyInterceptor(): APIKeyInterceptor {
-        return APIKeyInterceptor("api_key", "52c8f60847852a53d10858ec3c595bf4")
+        return APIKeyInterceptor("api_key", SecretsFile.API_KEY)
     }
 
     @Provides
