@@ -10,6 +10,7 @@ import com.example.azfilm.R
 import com.example.azfilm.base.BaseFragment
 import com.example.azfilm.databinding.FragmentRegisterBinding
 import com.example.azfilm.ui.MainActivity.Companion.navGraphTracker
+import com.example.azfilm.utils.AuthResultWrapper
 import com.example.azfilm.utils.ResultWrapper
 import com.example.azfilm.utils.UIHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,19 +63,22 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
 
         registerViewModel.registrationResult.observe(viewLifecycleOwner){
             when (it) {
-                is ResultWrapper.Loading->{
-                    Toast.makeText(requireContext(), "Registration loading", Toast.LENGTH_SHORT).show()
+                is AuthResultWrapper.Loading->{
+                    Toast.makeText(requireContext(), "Login Processing", Toast.LENGTH_SHORT).show()
                 }
-                is ResultWrapper.Success -> {
+                is AuthResultWrapper.Success -> {
                     navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
                 }
-                is ResultWrapper.GenericError -> {
-                    Toast.makeText(requireContext(), it.error ?: "Registration failed", Toast.LENGTH_SHORT).show()
+                is AuthResultWrapper.GenericError -> {
+                    Toast.makeText(requireContext(), it.error ?: "Login failed", Toast.LENGTH_SHORT).show()
                 }
-                is ResultWrapper.NetworkError -> {
+                is AuthResultWrapper.NetworkError -> {
                     Toast.makeText(requireContext(), "Network error, please try again", Toast.LENGTH_SHORT).show()
                 }
-                else -> Unit // Handle other states if necessary
+                is AuthResultWrapper.Logout->{
+                    navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
+                }
+
             }
         }
     }

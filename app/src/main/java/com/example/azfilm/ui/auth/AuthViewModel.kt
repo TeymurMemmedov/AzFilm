@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.azfilm.data.UserRepository
+import com.example.azfilm.utils.AuthResultWrapper
 import com.example.azfilm.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,11 +27,11 @@ class AuthViewModel @Inject constructor(
     val passwordError: LiveData<String?> = _passwordError
 
 
-    private val _registrationResult = MutableLiveData<ResultWrapper<Unit>>()
-    val registrationResult: LiveData<ResultWrapper<Unit>> = _registrationResult
+    private val _registrationResult = MutableLiveData<AuthResultWrapper<Unit>>()
+    val registrationResult: LiveData<AuthResultWrapper<Unit>> = _registrationResult
 
-    private val _loginResult = MutableLiveData<ResultWrapper<Unit>>()
-    val loginResult: LiveData<ResultWrapper<Unit>> = _loginResult
+    private val _loginResult = MutableLiveData<AuthResultWrapper<Unit>>()
+    val loginResult: LiveData<AuthResultWrapper<Unit>> = _loginResult
 
 
     fun validateFields(username:String?,email:String?,password:String?):Boolean {
@@ -63,7 +64,7 @@ class AuthViewModel @Inject constructor(
 
     fun registerUser(username: String, email: String, password: String) {
         viewModelScope.launch {
-            _registrationResult.postValue(ResultWrapper.Loading)
+            _registrationResult.postValue(AuthResultWrapper.Loading)
             val result = userRepository.registerWithEmail(username, email, password)
             _registrationResult.postValue(result)
         }
@@ -71,14 +72,24 @@ class AuthViewModel @Inject constructor(
 
     fun signInUser(email: String, password: String) {
         viewModelScope.launch {
-            _registrationResult.postValue(ResultWrapper.Loading)
+            _registrationResult.postValue(AuthResultWrapper.Loading)
             val result = userRepository.signInWithEmailAndPassword(email, password)
             _loginResult.postValue(result)
         }
     }
 
+    fun signInWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            _loginResult.postValue(AuthResultWrapper.Loading)
+            val result = userRepository.signInWithGoogle(idToken)
+            _loginResult.postValue(result)
+        }
+    }
+
     fun signOut(){
-        userRepository.signOut()
+       userRepository.signOut()
+        _loginResult.postValue(AuthResultWrapper.Logout)
+        _registrationResult.postValue(AuthResultWrapper.Logout)
     }
 
 }

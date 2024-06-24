@@ -24,6 +24,20 @@ sealed class ResultWrapperLocal<out T> {
 
 }
 
+sealed class AuthResultWrapper<out T> {
+
+    data object Loading : AuthResultWrapper<Nothing>()
+
+    data class Success<out T>(val value: T) : AuthResultWrapper<T>()
+    data class GenericError(val code: Int? = null, val error: String? = null) :
+        AuthResultWrapper<Nothing>()
+
+    data object NetworkError : AuthResultWrapper<Nothing>()
+
+    data object Logout : AuthResultWrapper<Nothing>()
+
+}
+
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
     apiCall: suspend () -> T
@@ -49,6 +63,38 @@ suspend fun <T> safeApiCall(
 
                 else -> {
                     ResultWrapper.GenericError(null, null)
+                }
+            }
+        }
+    }
+}
+
+
+suspend fun <T> safeAuthRequest(
+    dispatcher: CoroutineDispatcher,
+    apiCall: suspend () -> T
+): AuthResultWrapper<T> {
+    return withContext(dispatcher) {
+        try {
+            AuthResultWrapper.Success(apiCall.invoke())
+        } catch (throwable: Throwable) {
+            when (throwable) {
+                is IOException -> {
+                    AuthResultWrapper.NetworkError
+                }
+
+                is HttpException -> {
+                    val code = throwable.code()
+                    val errorMessage = throwable.message()
+                    AuthResultWrapper.GenericError(code, errorMessage)
+                }
+
+                is Exception->{
+                    AuthResultWrapper.GenericError(null,throwable.message)
+                }
+
+                else -> {
+                    AuthResultWrapper.GenericError(null, null)
                 }
             }
         }
