@@ -8,17 +8,24 @@ class CustomInterceptor : Interceptor {
 
         val originalRequest = chain.request()
 
-        // Add query parameters to the request
-        val modifiedUrl = originalRequest.url.newBuilder()
-            .addQueryParameter("with_original_language", "az")
-            .build()
+        if(!originalRequest.toString().contains("search")) {
+            // Add query parameters to the request
+            val modifiedUrl = originalRequest.url.newBuilder()
+                .addQueryParameter("with_original_language", "az")
+                .build()
 
-        // Create a new request with modified URL
-        val newRequest = originalRequest.newBuilder()
-            .url(modifiedUrl)
-            .build()
+            // Create a new request with modified URL
+            val newRequest = originalRequest.newBuilder()
+                .url(modifiedUrl)
+                .build()
 
-        // Proceed with the request
-        return chain.proceed(newRequest)
+            // Proceed with the request
+            return chain.proceed(newRequest)
+
+        }
+        else return  chain.proceed(originalRequest)
+
+
+
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.azfilm.R
 import com.example.azfilm.base.BaseFragment
@@ -35,7 +36,11 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
         binding.apply {
 
 
-            imgMovie.load(movie.backdropPath.generateImageFullPath())
+            imgMovie.load(
+                if(movie.backdropPath.isBlank())
+                    R.drawable.img_not_found_backdrop
+                else
+                    movie.backdropPath.generateImageFullPath())
             tvMovieName.text = movie.title
             tvMovieGenres.text = movie.genres.joinToString()
             tvOverview.text = movie.overview
@@ -46,11 +51,6 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
             btnAddOrRemoveToFavorites.setOnClickListener {
                 movieViewModel.changeFavoritStateOfSelectedFilm()
             }
-
-
-
-
-
 
         }
 
@@ -87,6 +87,11 @@ class MovieFragment: BaseFragment<FragmentMovieBinding>
             }
         }
 
+        binding.btnNavigateToHome.setOnClickListener {
+            findNavController().popBackStack(R.id.homeFragment, false)
+        }
         return  binding.root
     }
+
+
 }

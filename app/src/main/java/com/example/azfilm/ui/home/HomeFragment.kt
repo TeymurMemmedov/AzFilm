@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -21,6 +22,7 @@ import com.example.azfilm.databinding.FragmentHomeBinding
 import com.example.azfilm.databinding.RvMovieWithPosterBinding
 import com.example.azfilm.ui.adapters.GenericRvAdapter
 import com.example.azfilm.ui.movie.MovieViewModel
+import com.example.azfilm.ui.search.SearchViewModel
 import com.example.azfilm.ui.uiModels.MovieUIModel
 import com.example.azfilm.utils.MovieHelper.Companion.generateImageFullPath
 import com.example.azfilm.utils.MovieListTypes
@@ -39,10 +41,13 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 
      private val  homeViewModel: HomeViewModel by viewModels()
      private val  movieViewModel: MovieViewModel by activityViewModels()
+
+    private  val searchViewModel:SearchViewModel by activityViewModels()
      private var  user: FirebaseUser? = null
 
     val homeFilmClickListener:(MovieUIModel)->Unit = {
             movieViewModel.getMovieById(it.id)
+//            findNavController().navigate(R.id.movieFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,9 +153,9 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         }
 
 
-        binding.btnRefresh.setOnClickListener {
-            homeViewModel.refreshMovieLists()
-        }
+//        binding.btnRefresh.setOnClickListener {
+//            homeViewModel.refreshMovieLists()
+//        }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.refreshMovieLists()
@@ -161,15 +166,17 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
 
 
 
-        movieViewModel.selectedFilm.observe(viewLifecycleOwner){
-
-            if(it!=null) {
+        movieViewModel.selectedFilm.observe(viewLifecycleOwner) { film ->
+            if (film != null) {
+                Log.d("Movie_Fragment", "MovieFragment navigated")
                 movieViewModel.setInitialFavoriteState()
-                val bundle = Bundle()
-                bundle.putSerializable("movie", it)
+                val bundle = Bundle().apply {
+                    putSerializable("movie", film)
+                }
                 findNavController().navigate(R.id.movieFragment, bundle)
             }
         }
+
 
 
 

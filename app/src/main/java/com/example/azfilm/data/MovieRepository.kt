@@ -20,6 +20,9 @@ class MovieRepository @Inject constructor(
     suspend fun getModerns(page:Int = 1) =safeApiCall(Dispatchers.IO) { movieService.getModerns(page) }
     suspend fun getAnimations(page:Int = 1) = safeApiCall(Dispatchers.IO) { movieService.getAnimations(page) }
 
+    suspend fun getSearchResults( query:String, page: Int = 1,) =
+        safeApiCall(Dispatchers.IO) { movieService.getSearchResults(query,page)}
+
     suspend fun getMovieById(id:Int) = movieService.getMovieById(id)
 
     // Add a movie to the favorites
@@ -39,6 +42,8 @@ class MovieRepository @Inject constructor(
             it.id == movieId
         } ?: false
     }
+
+    suspend fun deleteAllFavorites() = movieDao.deleteAllFavorites()
 
 
 

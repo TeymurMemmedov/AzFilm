@@ -15,14 +15,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/img_stepmother" />
+        tools:src="@drawable/img_stepmother"
+       />
+
+    <ImageButton
+        android:id="@+id/btnNavigateToHome"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="36dp"
+
+        android:src="@drawable/icon_arrow_back"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white"
+        android:scaleType="centerInside"
+        android:background="@drawable/shape_circle"/>
+
 
     <TextView
         android:id="@+id/tvMovieName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:textAppearance="@style/font_28_600"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddOrRemoveToFavorites"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/imgMovie"
         tools:text="@string/movie_title" />
@@ -45,8 +61,7 @@
         android:src="@drawable/icon_favorite_filled"
         app:layout_constraintBottom_toBottomOf="@id/tvMovieGenres"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="@id/tvMovieName"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/imgMovie" />
 
 
     <TextView

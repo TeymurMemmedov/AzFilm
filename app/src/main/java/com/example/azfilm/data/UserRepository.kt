@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val auth: FirebaseAuth,
-    private val googleSignInClient: GoogleSignInClient
+    private val googleSignInClient: GoogleSignInClient,
 ) {
 
     suspend fun registerWithEmail(
@@ -53,5 +53,6 @@ class UserRepository @Inject constructor(
     fun signOut(){
         auth.signOut()
         googleSignInClient.signOut()
+
     }
 }

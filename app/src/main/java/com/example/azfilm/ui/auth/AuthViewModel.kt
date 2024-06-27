@@ -4,16 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.data.UserRepository
 import com.example.azfilm.utils.AuthResultWrapper
 import com.example.azfilm.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private  val userRepository: UserRepository
+    private  val userRepository: UserRepository,
+    private val movieRepository: MovieRepository
+
 
 ): ViewModel() {
 
@@ -87,9 +91,14 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signOut(){
+
        userRepository.signOut()
         _loginResult.postValue(AuthResultWrapper.Logout)
         _registrationResult.postValue(AuthResultWrapper.Logout)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            movieRepository.deleteAllFavorites()
+        }
     }
 
 }

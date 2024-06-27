@@ -3,6 +3,7 @@ package com.example.azfilm.api
 import com.example.azfilm.api.serviceModels.MovieDetailsResponseItem
 import com.example.azfilm.api.serviceModels.MovieResponseItem
 import com.example.azfilm.base.BasePagingResponse
+import com.example.azfilm.utils.ResultWrapper
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
@@ -50,6 +51,13 @@ interface MovieService {
         @Path("id") id: Int,
 //        @Query("append_to_response") appendToResponse:String = "images"
     ): Response<MovieDetailsResponseItem>
+
+
+     @GET("search/movie")
+     suspend fun getSearchResults(
+         @Query("query") query:String,
+         @Query("page") page:Int
+     ):BasePagingResponse<MovieResponseItem>
 
    // https://api.themoviedb.org/3/movie/524321?api_key=52c8f60847852a53d10858ec3c595bf4&append_to_response=credits,images
 

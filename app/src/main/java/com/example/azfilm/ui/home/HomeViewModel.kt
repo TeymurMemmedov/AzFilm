@@ -25,6 +25,15 @@ class HomeViewModel @Inject constructor(
     val movieService = RetrofitInstance.api
 
 
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("HomeViewModel","dead")
+    }
+
+
+
+
     private val _recentFilms = MutableLiveData<ResultWrapper<BasePagingResponse<MovieResponseItem>>>(
             ResultWrapper.Loading
         )

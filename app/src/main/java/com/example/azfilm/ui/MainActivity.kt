@@ -6,7 +6,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.azfilm.R
@@ -14,8 +16,10 @@ import com.example.azfilm.databinding.ActivityMainBinding
 import com.example.azfilm.ui.auth.AuthViewModel
 import com.example.azfilm.ui.favorites.FavoritesViewModel
 import com.example.azfilm.ui.movie.MovieViewModel
+import com.example.azfilm.ui.search.SearchViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,9 +37,13 @@ class MainActivity : AppCompatActivity() {
     val favoritesViewModel: FavoritesViewModel by viewModels()
     val movieViewModel :MovieViewModel by viewModels()
 
+    val searchViewModel by viewModels<SearchViewModel>()
+
     companion object {
        lateinit var navGraphTracker: NavGraphTrackerViewModel
     }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +73,39 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.bottomNavigationView.setupWithNavController(navController)
-        
+
+        binding. bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.homeFragment -> {
+                    navController.popBackStack(R.id.homeFragment, false)
+                    true
+                }
+                R.id.favoritesFragment -> {
+                    navController.popBackStack(R.id.favoritesFragment, false)
+                    navController.navigate(R.id.favoritesFragment)
+                    true
+                }
+                R.id.profileFragment -> {
+                    navController.popBackStack(R.id.profileFragment, false)
+                    navController.navigate(R.id.profileFragment)
+                    true
+                }
+
+                R.id.searchFragment -> {
+                    navController.popBackStack(R.id.searchFragment, false)
+                    navController.navigate(R.id.searchFragment)
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+
+
+
+
+
 
 
 
@@ -89,6 +129,16 @@ class MainActivity : AppCompatActivity() {
             navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
         }
     }
+
+    override fun onBackPressed() {
+        val navController = findNavController(R.id.main_fragment_navhost)
+        if (navController.currentDestination?.id == R.id.movieFragment) {
+            navController.popBackStack(R.id.homeFragment, false)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
 
 
 

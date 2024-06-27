@@ -10,9 +10,6 @@
 
 <ScrollView
     android:id="@+id/scrollHome"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -51,32 +48,7 @@
             app:layout_constraintStart_toStartOf="@+id/tvGreeting"
             app:layout_constraintTop_toBottomOf="@+id/tvGreeting" />
 
-        <EditText
-            android:id="@+id/evFindMovie"
-            style="@style/ev_find_movie"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:hint="Search a film!"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            app:layout_constraintEnd_toStartOf="@+id/btSearch"
-            app:layout_constraintStart_toStartOf="@+id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/imgUser" />
 
-        <ImageButton
-            android:id="@+id/btSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
-            android:background="@drawable/ev_find_movie_bg"
-            android:padding="8dp"
-            android:src="@drawable/icon_search"
-            app:layout_constraintBottom_toBottomOf="@+id/evFindMovie"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/evFindMovie"
-            app:tint="@color/white" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/startGuideline"
@@ -97,11 +69,12 @@
             android:id="@+id/tvRecents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="Recents"
             android:textAppearance="@style/font_22_800"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/btnRefresh" />
+            app:layout_constraintTop_toBottomOf="@+id/imgUser" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecents"
@@ -236,15 +209,15 @@
             app:layout_constraintTop_toBottomOf="@+id/rvAnimations"
             app:layout_constraintVertical_bias="0.5" />
 
-        <Button
-            android:id="@+id/btnRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="8dp"
-            android:text="Refresh"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/evFindMovie" />
+<!--        <Button-->
+<!--            android:id="@+id/btnRefresh"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="28dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:text="Refresh"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/evFindMovie" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

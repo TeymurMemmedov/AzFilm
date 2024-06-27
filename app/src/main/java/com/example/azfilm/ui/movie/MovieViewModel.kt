@@ -1,6 +1,7 @@
 package com.example.azfilm.ui.movie
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,9 +20,26 @@ class MovieViewModel @Inject constructor(
     private val _selectedFilm = MutableLiveData<MovieDetailUIModel?>()
     val selectedFilm: LiveData<MovieDetailUIModel?> = _selectedFilm
 
+
+    private val _movieLoaded = MutableLiveData<Boolean>()
+    val movieLoaded:LiveData<Boolean> = _movieLoaded
+
+//
+//    fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
+//        val mediator = MediatorLiveData<T>()
+//        mediator.addSource(this) { value ->
+//            if (mediator.value != value) {
+//                mediator.value = value
+//            }
+//        }
+//        return mediator
+//    }
+
     fun setNullToSelectedFilm() {
         _selectedFilm.value = null
     }
+
+
 
     fun changeFavoritStateOfSelectedFilm(){
         val currentSelectedFilm = _selectedFilm.value
@@ -50,6 +68,8 @@ class MovieViewModel @Inject constructor(
 
 
 
+
+
      fun getMovieById(id: Int) {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -60,6 +80,7 @@ class MovieViewModel @Inject constructor(
                         response.body()!!
                     )
                     _selectedFilm.postValue(movie)
+                    _movieLoaded.postValue(true)
                 }
             }
         }
@@ -67,10 +88,3 @@ class MovieViewModel @Inject constructor(
     }
 }
 
-//class MovieViewModelFactory(
-//    val movieRepository: MovieRepository
-//) : ViewModelProvider.Factory{
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        return MovieViewModel(movieRepository) as T
-//    }
-//}
