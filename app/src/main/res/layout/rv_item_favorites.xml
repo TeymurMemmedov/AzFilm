@@ -30,13 +30,14 @@
 
     <TextView
         android:id="@+id/tvFavoriteFilmName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/font_16_600"
         android:layout_marginTop="12dp"
+        android:textAppearance="@style/font_16_600"
+        app:layout_constraintEnd_toStartOf="@+id/btnGoToMovie"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgFavoriteFilm"
-        tools:text = "Ögey Ana"/>
+        tools:text="Ögey Ana" />
 
 
     <TextView

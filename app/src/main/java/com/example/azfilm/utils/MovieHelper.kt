@@ -34,23 +34,6 @@ class MovieHelper {
             10752 to "War",
         )
 
-//        fun initializeGenreNames(movies: List<MovieInfoMinimalistic>) {
-//            for (movie in movies) {
-//                // Ensure movie.genre_names is initialized
-//                if (movie.genre_names == null) {
-//                    movie.genre_names = mutableListOf()
-//                }
-//
-//                for (genre_id in movie.genre_ids) {
-//                    genresMap[genre_id]?.let {
-//                        movie.genre_names.add(it)
-//                    }
-//                }
-//            }
-//        }
-
-
-
 
     }
 }

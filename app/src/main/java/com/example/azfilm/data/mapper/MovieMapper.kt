@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 fun mapMovieResponseItemToMovieUIModel(responseItem: MovieResponseItem): MovieUIModel {
     return MovieUIModel(
         id = responseItem.id!!, // Use Elvis operator to ensure id is not null
-        title = responseItem.title ?: "", // Use Elvis operator to handle null title
+        title = responseItem.original_title ?: "", // Use Elvis operator to handle null title
         posterPath = responseItem.poster_path ?: "", // Use Elvis operator to handle null posterPath
         genres = responseItem.genre_ids?.map { genreId ->
             genresMap[genreId]
@@ -25,7 +25,7 @@ fun mapMovieResponseItemToMovieUIModel(responseItem: MovieResponseItem): MovieUI
 fun mapMovieDetailsResponseItemToMovieDetailUIModel(responseItem: MovieDetailsResponseItem): MovieDetailUIModel {
     return MovieDetailUIModel(
         id = responseItem.id!!, // Ensure id is not null
-        title = responseItem.title ?: "", // Handle null title
+        title = responseItem.original_title ?: "", // Handle null title
         backdropPath = responseItem.backdrop_path ?: "", // Handle null backdropPath
         genres = responseItem.genres?.map { genre -> genre.name ?: "" } ?: emptyList(), // Handle null genres or genre names
         overview = responseItem.overview ?: "", // Handle null overview
@@ -53,7 +53,7 @@ fun mapMovieDetailsResponseItemToFavoriteMovie(responseItem: MovieDetailsRespons
     return FavoriteMovie(
         id = responseItem.id!!, // Ensure id is not null (primary key)
         backdropPath = responseItem.backdrop_path,
-        title = responseItem.title ?: "", // Handle null title
+        title = responseItem.original_title ?: "", // Handle null title
         addedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) // Set current date as added date
     )
 }

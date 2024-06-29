@@ -24,15 +24,10 @@ class HomeViewModel @Inject constructor(
 {
     val movieService = RetrofitInstance.api
 
-
-
     override fun onCleared() {
         super.onCleared()
         Log.d("HomeViewModel","dead")
     }
-
-
-
 
     private val _recentFilms = MutableLiveData<ResultWrapper<BasePagingResponse<MovieResponseItem>>>(
             ResultWrapper.Loading
@@ -70,41 +65,6 @@ class HomeViewModel @Inject constructor(
             getAnimations()
 
         }
-
-//         suspend private fun getRecents(page:Int = 1) {
-//            Log.d("Fetch Status","RecentsStarted")
-//            val recents = movieRepository.getRecents(page)
-//            _recentFilms.postValue(recents)
-//            Log.d("Fetch Status","RecentsEnded")
-//
-//         }
-//
-//    suspend private fun getClassics(page:Int = 1) {
-//        Log.d("Fetch Status","RecentsStarted")
-//        val recents = movieRepository.getClassics(page)
-//        _recentFilms.postValue(recents)
-//        Log.d("Fetch Status","RecentsEnded")
-//
-//    }
-//
-//    suspend private fun getModerns(page:Int = 1) {
-//        Log.d("Fetch Status","RecentsStarted")
-//        val recents = movieRepository.getModerns(page)
-//        _recentFilms.postValue(recents)
-//        Log.d("Fetch Status","RecentsEnded")
-//
-//    }
-//
-//    suspend private fun getAnimations(page:Int = 1) {
-//        Log.d("Fetch Status","RecentsStarted")
-//        val recents = movieRepository.getAnimations(page)
-//        _recentFilms.postValue(recents)
-//        Log.d("Fetch Status","RecentsEnded")
-//
-//    }
-
-
-
 
      private fun getRecents(page:Int = 1) {
         viewModelScope.launch {

@@ -23,7 +23,7 @@ class MovieRepository @Inject constructor(
     suspend fun getSearchResults( query:String, page: Int = 1,) =
         safeApiCall(Dispatchers.IO) { movieService.getSearchResults(query,page)}
 
-    suspend fun getMovieById(id:Int) = movieService.getMovieById(id)
+    suspend fun getMovieById(id:Int) = safeApiCall(Dispatchers.IO){ movieService.getMovieById(id)}
 
     // Add a movie to the favorites
     suspend fun addMovieToFavorites(movie: FavoriteMovie) {
@@ -34,6 +34,7 @@ class MovieRepository @Inject constructor(
     suspend fun removeMovieFromFavorites(movie: FavoriteMovie) {
         movieDao.deleteMovie(movie)
     }
+
 
 
     fun isFavoriteMovie(movieId:Int): Boolean = runBlocking {

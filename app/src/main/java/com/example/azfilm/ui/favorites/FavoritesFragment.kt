@@ -26,7 +26,9 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
     private lateinit var favoritesAdapter: GenericRvAdapter<FavoriteMovie, RvItemFavoritesBinding>
 
     private val favoriteClickListener: (FavoriteMovie) -> Unit = {
+        movieViewModel.clearSelectedFilmData()
         movieViewModel.getMovieById(it.id)
+        findNavController().navigate(R.id.movieFragment)
     }
 
     override fun onCreateView(
@@ -35,13 +37,12 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
         savedInstanceState: Bundle?
     ): View? {
          super.onCreateView(inflater, container, savedInstanceState)
-        movieViewModel.setNullToSelectedFilm()
+//        movieViewModel.setNullToSelectedFilm()
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Setup RecyclerView and adapter
         favoritesAdapter = GenericRvAdapter(RvItemFavoritesBinding::inflate) { binding, movie, _ ->
             binding.apply {
                 tvFavoriteFilmName.text = movie.title
@@ -58,7 +59,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
                     Log.d("Hey_salam","clicked")
                    favoriteClickListener(movie)
                 }
-
             }
         }
 
@@ -67,21 +67,9 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
             adapter = favoritesAdapter
         }
 
-        // Observe favorite movies
         favoritesViewModel.favoriteMovies.observe(viewLifecycleOwner) {
             favoritesAdapter.sendListToAdapter(it)
         }
 
-        movieViewModel.selectedFilm.distinctUntilChanged().observe(viewLifecycleOwner) { film ->
-            Log.d("Movie_Fragment", "Movie changed")
-            if (film != null) {
-                Log.d("Movie_Fragment", "MovieFragment navigated")
-                movieViewModel.setInitialFavoriteState()
-                val bundle = Bundle().apply {
-                    putSerializable("movie", film)
-                }
-                findNavController().navigate(R.id.movieFragment, bundle)
-            }
-        }
     }
 }

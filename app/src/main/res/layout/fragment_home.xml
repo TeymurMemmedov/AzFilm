@@ -65,16 +65,45 @@
             app:layout_constraintGuide_percent="0.000" />
 
 
+        <EditText
+            android:id="@+id/evFindMovie"
+            style="@style/ev_find_movie"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Search a film!"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            app:layout_constraintEnd_toStartOf="@+id/btSearch"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/imgUser" />
+
+        <ImageButton
+            android:id="@+id/btSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/ev_find_movie_bg"
+            android:padding="8dp"
+            android:src="@drawable/icon_search"
+            app:layout_constraintBottom_toBottomOf="@+id/evFindMovie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/evFindMovie"
+            app:tint="@color/white" />
+
+
         <TextView
             android:id="@+id/tvRecents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:text="Recents"
             android:textAppearance="@style/font_22_800"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/imgUser" />
+            app:layout_constraintTop_toBottomOf="@+id/evFindMovie" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecents"

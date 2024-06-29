@@ -99,16 +99,6 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     override fun onStart() {
@@ -129,18 +119,6 @@ class MainActivity : AppCompatActivity() {
             navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
         }
     }
-
-    override fun onBackPressed() {
-        val navController = findNavController(R.id.main_fragment_navhost)
-        if (navController.currentDestination?.id == R.id.movieFragment) {
-            navController.popBackStack(R.id.homeFragment, false)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-
-
 
     override fun onResume() {
         super.onResume()

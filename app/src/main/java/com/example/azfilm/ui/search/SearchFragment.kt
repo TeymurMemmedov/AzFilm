@@ -55,7 +55,9 @@ class SearchFragment:BaseFragment<FragmentSearchBinding>(
     }
 
     val searchClickListener:(MovieUIModel)->Unit = {
+        movieViewModel.clearSelectedFilmData()
         movieViewModel.getMovieById(it.id)
+        findNavController().navigate(R.id.movieFragment)
     }
 
     fun updateUI(result: ResultWrapper<BasePagingResponse<MovieResponseItem>?>, adapter: GenericRvAdapter<MovieUIModel, RvMovieWithPosterBinding>, progressBar: ProgressBar) {
@@ -86,8 +88,6 @@ class SearchFragment:BaseFragment<FragmentSearchBinding>(
 
         super.onCreateView(inflater, container, savedInstanceState)
 
-        movieViewModel.setNullToSelectedFilm()
-
         val searchAdapter = GenericRvAdapter<MovieUIModel,RvMovieWithPosterBinding>(
             RvMovieWithPosterBinding::inflate,
             bind
@@ -96,19 +96,6 @@ class SearchFragment:BaseFragment<FragmentSearchBinding>(
         binding.rvSearchResults.apply {
             adapter = searchAdapter;
             layoutManager = GridLayoutManager(requireContext(),2, GridLayoutManager.VERTICAL,false)  }
-
-
-        movieViewModel.selectedFilm.observe(viewLifecycleOwner) { film ->
-            if (film != null) {
-                Log.d("Movie_Fragment", "MovieFragment navigated")
-                movieViewModel.setInitialFavoriteState()
-                val bundle = Bundle().apply {
-                    putSerializable("movie", film)
-                }
-                findNavController().navigate(R.id.movieFragment, bundle)
-            }
-        }
-
 
 
         searchViewModel.searchResults.observe(viewLifecycleOwner){
@@ -120,13 +107,8 @@ class SearchFragment:BaseFragment<FragmentSearchBinding>(
             val query  = binding.evFindMovie.text.toString()
             if(query.isNotBlank()){
                 searchViewModel.fetchSearchResults(query)
-//                findNavController().navigate(R.id.searchFragment)
             }
         }
-
-
-
-
 
         return binding.root
     }

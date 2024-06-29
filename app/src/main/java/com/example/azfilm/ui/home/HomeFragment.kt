@@ -45,9 +45,14 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
     private  val searchViewModel:SearchViewModel by activityViewModels()
      private var  user: FirebaseUser? = null
 
+
+
     val homeFilmClickListener:(MovieUIModel)->Unit = {
+//            Log.d("SELECTED_MOVIE_HOME","${movieViewModel.selectedFilmUIModel.value?.id}")
+            movieViewModel.clearSelectedFilmData()
             movieViewModel.getMovieById(it.id)
-//            findNavController().navigate(R.id.movieFragment)
+//            Log.d("SELECTED_MOVIE_HOME","${movieViewModel.selectedFilmUIModel.value?.id}")
+            findNavController().navigate(R.id.movieFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +70,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         user = auth.currentUser
         Log.d("HomeFragment","onCreateView")
 
-        movieViewModel.setNullToSelectedFilm()
+
 
         binding.tvGreeting.text = "Hello, ${user?.displayName}"
 
@@ -153,38 +158,21 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>(
         }
 
 
-//        binding.btnRefresh.setOnClickListener {
-//            homeViewModel.refreshMovieLists()
-//        }
-
         binding.swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.refreshMovieLists()
             binding.swipeRefreshLayout.setRefreshing(false);
         }
 
-
-
-
-
-        movieViewModel.selectedFilm.observe(viewLifecycleOwner) { film ->
-            if (film != null) {
-                Log.d("Movie_Fragment", "MovieFragment navigated")
-                movieViewModel.setInitialFavoriteState()
-                val bundle = Bundle().apply {
-                    putSerializable("movie", film)
-                }
-                findNavController().navigate(R.id.movieFragment, bundle)
+        binding.btSearch.setOnClickListener {
+            val query  = binding.evFindMovie.text.toString()
+            if(query.isNotBlank()){
+                searchViewModel.fetchSearchResults(query)
+                findNavController().navigate(R.id.searchFragment)
             }
         }
 
-
-
-
-
         return  binding.root
     }
-
-
 
 
 
