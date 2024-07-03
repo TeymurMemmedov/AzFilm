@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.azfilm.api.serviceModels.MovieDetailsResponseItem
 import com.example.azfilm.api.serviceModels.MovieResponseItem
+import com.example.azfilm.data.FirebaseRepository
 import com.example.azfilm.data.MovieRepository
 import com.example.azfilm.data.mapper.mapMovieDetailUIModelToFavoriteMovie
 import com.example.azfilm.data.mapper.mapMovieDetailsResponseItemToMovieDetailUIModel
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    val movieRepository: MovieRepository) : ViewModel() {
+    val movieRepository: MovieRepository,
+    val firabaseRepository: FirebaseRepository) : ViewModel() {
 
     private val _selectedFilm = MutableLiveData<ResultWrapper<Response<MovieDetailsResponseItem>>?>()
     val selectedFilm: LiveData<ResultWrapper<Response<MovieDetailsResponseItem>>?> = _selectedFilm
@@ -37,8 +39,10 @@ class MovieViewModel @Inject constructor(
         if (movieResponseItem != null) {
 
             val movieUIModel = mapMovieDetailsResponseItemToMovieDetailUIModel(movieResponseItem)
-            movieUIModel.isFavorite = movieRepository.isFavoriteMovie(movieUIModel.id)
-            _selectedFilmUIModel.postValue(movieUIModel)
+            movieRepository.isFavoriteMovie(movieUIModel.id){
+                movieUIModel.isFavorite = it
+                _selectedFilmUIModel.postValue(movieUIModel)
+            }
         }
 
     }
@@ -79,7 +83,7 @@ class MovieViewModel @Inject constructor(
                         )
                     }?.let {
                         Log.d("ADD_MOVIE_TO_FAVORITE","Add Movie To Favorites worked")
-                        movieRepository.addMovieToFavorites(it) }
+                        firabaseRepository.addMovieToFavorites(it) }
                 }
             }
             else{
@@ -92,7 +96,7 @@ class MovieViewModel @Inject constructor(
                         )
                     }?.let {
                         Log.d("REMOVE_FROM_FAVORITES","Remove from Favorites worked")
-                        movieRepository.removeMovieFromFavorites(it) }
+                        firabaseRepository.removeMovieFromFavorites(it) }
                 }
 
             }

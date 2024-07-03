@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.azfilm.data.AzFilmDatabase
 import com.example.azfilm.data.MovieDao
+import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,4 +33,8 @@ object DatabaseModule {
     fun provideMovieDao(database: AzFilmDatabase): MovieDao {
         return database.movieDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDatabase():FirebaseDatabase = FirebaseDatabase.getInstance()
 }

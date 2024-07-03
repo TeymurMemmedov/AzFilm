@@ -93,12 +93,14 @@ class AuthViewModel @Inject constructor(
     fun signOut(){
 
        userRepository.signOut()
+
         _loginResult.postValue(AuthResultWrapper.Logout)
         _registrationResult.postValue(AuthResultWrapper.Logout)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.deleteAllFavorites()
-        }
+//
+//        viewModelScope.launch(Dispatchers.IO) {
+//            movieRepository.deleteAllFavorites()
+//        }
     }
 
 }

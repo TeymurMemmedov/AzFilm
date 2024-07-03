@@ -43,6 +43,8 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         favoritesAdapter = GenericRvAdapter(RvItemFavoritesBinding::inflate) { binding, movie, _ ->
             binding.apply {
                 tvFavoriteFilmName.text = movie.title
@@ -67,9 +69,15 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
             adapter = favoritesAdapter
         }
 
+        favoritesViewModel.loadFavorites()
+
         favoritesViewModel.favoriteMovies.observe(viewLifecycleOwner) {
             favoritesAdapter.sendListToAdapter(it)
         }
 
+
+
+
     }
+
 }

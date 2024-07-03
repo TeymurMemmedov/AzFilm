@@ -10,4 +10,6 @@ data class FavoriteMovie (
     val backdropPath:String?,
     val title : String,
     val addedDate: String
-)
+){
+    constructor() : this(-1, "", "", "")
+}

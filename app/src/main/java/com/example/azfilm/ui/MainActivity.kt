@@ -105,7 +105,9 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
         binding.btnLogout.setOnClickListener {
+            favoritesViewModel.clearFavorites()
             authViewModel.signOut()
+
             navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
 
         }
