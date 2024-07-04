@@ -42,6 +42,9 @@
     <string name="runtime">
         1 hour 22 minute
     </string>
+    <string name="check_your_email">We have sent a verification email on your entered email adress, please check and verify. After verifying you can log in</string>
+    <string name="check_your_email_heading">Check your email</string>
+    <string name="check_your_email_action_text">Go to email</string>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.azfilm.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -67,7 +68,8 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
                     Toast.makeText(requireContext(), "Login Processing", Toast.LENGTH_SHORT).show()
                 }
                 is AuthResultWrapper.Success -> {
-                    navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
+                    findNavController().navigate(R.id.checkYourEmailFragment)
+//                    navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
                 }
                 is AuthResultWrapper.GenericError -> {
                     Toast.makeText(requireContext(), it.error ?: "Login failed", Toast.LENGTH_SHORT).show()
@@ -78,6 +80,7 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding>(
                 is AuthResultWrapper.Logout->{
                     navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
                 }
+                else -> Log.d("salam","salam")
 
             }
         }

@@ -17,5 +17,9 @@
         android:id="@+id/registerFragment"
         android:name="com.example.azfilm.ui.auth.RegisterFragment"
         android:label="RegisterFragment" />
+    <fragment
+        android:id="@+id/checkYourEmailFragment"
+        android:name="com.example.azfilm.ui.auth.CheckYourEmailFragment"
+        android:label="CheckYourEmailFragment" />
 
 </navigation>

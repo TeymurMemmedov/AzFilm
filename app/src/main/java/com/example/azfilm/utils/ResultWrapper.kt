@@ -1,5 +1,7 @@
 package com.example.azfilm.utils
 
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -36,7 +38,10 @@ sealed class AuthResultWrapper<out T> {
 
     data object Logout : AuthResultWrapper<Nothing>()
 
+    data object ReAuthRequired : AuthResultWrapper<Nothing>()
+
 }
+
 
 suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
@@ -47,27 +52,15 @@ suspend fun <T> safeApiCall(
             ResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
-                is IOException -> {
-                    ResultWrapper.NetworkError
-                }
-
-                is HttpException -> {
-                    val code = throwable.code()
-                    val errorMessage = throwable.message()
-                    ResultWrapper.GenericError(code, errorMessage)
-                }
-
-                is Exception->{
-                    ResultWrapper.GenericError(null,throwable.message)
-                }
-
-                else -> {
-                    ResultWrapper.GenericError(null, null)
-                }
+                is IOException -> ResultWrapper.NetworkError
+                is HttpException -> ResultWrapper.GenericError(throwable.code(), throwable.message())
+                is Exception -> ResultWrapper.GenericError(null, throwable.message)
+                else -> ResultWrapper.GenericError(null, null)
             }
         }
     }
 }
+
 
 
 suspend fun <T> safeAuthRequest(
@@ -76,26 +69,16 @@ suspend fun <T> safeAuthRequest(
 ): AuthResultWrapper<T> {
     return withContext(dispatcher) {
         try {
+            Log.d("ACCOUNT_DELETION"," TRY IS SUCCCESFUL")
             AuthResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
+            Log.d("ACCOUNT_DELETION"," THE CODE IS IN THE CATCH")
             when (throwable) {
-                is IOException -> {
-                    AuthResultWrapper.NetworkError
-                }
-
-                is HttpException -> {
-                    val code = throwable.code()
-                    val errorMessage = throwable.message()
-                    AuthResultWrapper.GenericError(code, errorMessage)
-                }
-
-                is Exception->{
-                    AuthResultWrapper.GenericError(null,throwable.message)
-                }
-
-                else -> {
-                    AuthResultWrapper.GenericError(null, null)
-                }
+                is IOException -> AuthResultWrapper.NetworkError
+                is HttpException -> AuthResultWrapper.GenericError(throwable.code(), throwable.message())
+                is FirebaseAuthRecentLoginRequiredException -> AuthResultWrapper.ReAuthRequired
+                is Exception -> AuthResultWrapper.GenericError(null, throwable.message)
+                else -> AuthResultWrapper.GenericError(null, null)
             }
         }
     }

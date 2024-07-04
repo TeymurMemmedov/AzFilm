@@ -5,21 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.azfilm.data.MovieRepository
-import com.example.azfilm.data.UserRepository
+import com.example.azfilm.data.AuthOperations
 import com.example.azfilm.utils.AuthResultWrapper
-import com.example.azfilm.utils.ResultWrapper
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private  val userRepository: UserRepository,
+    private val authOperations: AuthOperations,
     private val movieRepository: MovieRepository
-
-
-): ViewModel() {
+) : ViewModel() {
 
     private val _usernameError = MutableLiveData<String?>(null)
     val usernameError: LiveData<String?> = _usernameError
@@ -30,15 +28,16 @@ class AuthViewModel @Inject constructor(
     private val _passwordError = MutableLiveData<String?>(null)
     val passwordError: LiveData<String?> = _passwordError
 
-
     private val _registrationResult = MutableLiveData<AuthResultWrapper<Unit>>()
     val registrationResult: LiveData<AuthResultWrapper<Unit>> = _registrationResult
 
     private val _loginResult = MutableLiveData<AuthResultWrapper<Unit>>()
     val loginResult: LiveData<AuthResultWrapper<Unit>> = _loginResult
 
+    private val _deleteAccountResult = MutableLiveData<AuthResultWrapper<Unit>>()
+    val deleteAccountResult: LiveData<AuthResultWrapper<Unit>> = _deleteAccountResult
 
-    fun validateFields(username:String?,email:String?,password:String?):Boolean {
+    fun validateFields(username: String?, email: String?, password: String?): Boolean {
         var isValid = true
 
         if (username?.isBlank() == true) {
@@ -46,21 +45,20 @@ class AuthViewModel @Inject constructor(
             isValid = false
         }
 
-        if (email?.isBlank()==true) {
+        if (email?.isBlank() == true) {
             _emailError.value = "Email must be entered"
             isValid = false
         }
 
-        if (password?.isBlank()==true) {
+        if (password?.isBlank() == true) {
             _passwordError.value = "Password must be entered"
             isValid = false
         }
 
-        return  isValid
+        return isValid
     }
 
-
-    fun resetErrors(){
+    fun resetErrors() {
         _emailError.value = null
         _passwordError.value = null
         _usernameError.value = null
@@ -69,15 +67,16 @@ class AuthViewModel @Inject constructor(
     fun registerUser(username: String, email: String, password: String) {
         viewModelScope.launch {
             _registrationResult.postValue(AuthResultWrapper.Loading)
-            val result = userRepository.registerWithEmail(username, email, password)
+            val result = authOperations.registerWithEmail(username, email, password)
             _registrationResult.postValue(result)
         }
     }
 
     fun signInUser(email: String, password: String) {
         viewModelScope.launch {
-            _registrationResult.postValue(AuthResultWrapper.Loading)
-            val result = userRepository.signInWithEmailAndPassword(email, password)
+            _loginResult.postValue(AuthResultWrapper.Loading)
+            val result = authOperations.signInWithEmailAndPassword(email, password)
+
             _loginResult.postValue(result)
         }
     }
@@ -85,24 +84,34 @@ class AuthViewModel @Inject constructor(
     fun signInWithGoogle(idToken: String) {
         viewModelScope.launch {
             _loginResult.postValue(AuthResultWrapper.Loading)
-            val result = userRepository.signInWithGoogle(idToken)
+            val result = authOperations.signInWithGoogle(idToken)
             _loginResult.postValue(result)
         }
     }
 
-    fun signOut(){
-
-       userRepository.signOut()
-
+    fun signOut() {
+        authOperations.signOut()
         _loginResult.postValue(AuthResultWrapper.Logout)
         _registrationResult.postValue(AuthResultWrapper.Logout)
 
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//            movieRepository.deleteAllFavorites()
-//        }
     }
 
+    fun deleteUserAccount(user: FirebaseUser) {
+        viewModelScope.launch {
+            _deleteAccountResult.postValue(AuthResultWrapper.Loading)
+            val result = authOperations.deleteUserAccount(user)
+            _deleteAccountResult.postValue(result)
+        }
+    }
+
+    fun reauthenticateAndDeleteUser(user: FirebaseUser, credential: AuthCredential) {
+        viewModelScope.launch {
+            val reAuthResult = authOperations.reauthenticateUser(user, credential)
+            if (reAuthResult is AuthResultWrapper.Success) {
+                deleteUserAccount(user)
+            } else {
+                _deleteAccountResult.postValue(reAuthResult)
+            }
+        }
+    }
 }
-
-

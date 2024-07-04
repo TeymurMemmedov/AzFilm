@@ -2,6 +2,7 @@ package com.example.azfilm.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,6 +91,7 @@ class WelcomeFragment: BaseFragment<FragmentWelcomeBinding>(
                 is AuthResultWrapper.Logout->{
                     MainActivity.navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
                 }
+                else -> Log.d("salam","salam")
 
             }
         }

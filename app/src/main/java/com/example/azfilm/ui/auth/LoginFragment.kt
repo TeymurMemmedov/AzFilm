@@ -1,6 +1,7 @@
 package com.example.azfilm.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.example.azfilm.R
 import com.example.azfilm.base.BaseFragment
 import com.example.azfilm.databinding.FragmentLoginBinding
 import com.example.azfilm.ui.MainActivity.Companion.navGraphTracker
+import com.example.azfilm.ui.favorites.FavoritesViewModel
 import com.example.azfilm.utils.AuthResultWrapper
 import com.example.azfilm.utils.ResultWrapper
 import com.example.azfilm.utils.UIHelper
@@ -22,6 +24,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>(
 ) {
 
     private val loginViewModel: AuthViewModel by activityViewModels()
+    private val favoriteViewModel: FavoritesViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +71,9 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>(
                     Toast.makeText(requireContext(), "Login Processing", Toast.LENGTH_SHORT).show()
                 }
                 is AuthResultWrapper.Success -> {
+                    Log.d("LOGIN_PROCESS","SUCCESS")
                     navGraphTracker.setNavGraph(R.navigation.main_nav_graph)
+
                 }
                 is AuthResultWrapper.GenericError -> {
                     Toast.makeText(requireContext(), it.error ?: "Login failed", Toast.LENGTH_SHORT).show()
@@ -79,6 +84,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>(
                 is AuthResultWrapper.Logout->{
                     navGraphTracker.setNavGraph(R.navigation.auth_nav_graph)
                 }
+                else -> Log.d("salam","salam")
 
             }
         }

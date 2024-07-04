@@ -31,7 +31,6 @@ class FavoritesViewModel @Inject constructor(
 
     fun clearFavorites() {
         _favoriteMovies.value = emptyList()
-        movieRepository.removeFavoritesListener()
     }
 
     fun addMovieToFavorites(movie: FavoriteMovie) {
