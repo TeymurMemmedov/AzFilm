@@ -39,16 +39,6 @@
         <item name="android:fontWeight" tools:ignore="NewApi">500</item>
     </style>
 
-    <style name="font_14_600">
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontWeight" tools:ignore="NewApi">600</item>
-    </style>
-
-    <style name="font_14_400">
-        <item name="android:textSize">14sp</item>
-        <item name="android:fontWeight" tools:ignore="NewApi">400</item>
-    </style>
-
     <style name="font_16_600">
         <item name="android:textSize">16sp</item>
         <item name="android:fontWeight" tools:ignore="NewApi">600</item>
@@ -121,11 +111,6 @@
         <item name="android:paddingVertical" tools:targetApi="o">6dp</item>
     </style>
 
-
-    <style name="poster_w500">
-        <item name="android:width">500dp</item>
-        <item name="android:height">750dp</item>
-    </style>
 
     <style name="Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/white</item>

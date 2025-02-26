@@ -19,10 +19,6 @@
         You can browse and search for movies.
     </string>
 
-    <string name="base_url">
-        https://api.themoviedb.org/3
-    </string>
-
     <string name="movie_overview">
         The film is about the stepmother who tried to be a real mother of a boy. But she could be a real mother only after some difficult events for her and child."
     </string>
@@ -45,6 +41,7 @@
     <string name="check_your_email">We have sent a verification email on your entered email adress, please check and verify. After verifying you can log in</string>
     <string name="check_your_email_heading">Check your email</string>
     <string name="check_your_email_action_text">Go to email</string>
+    <string name="title_activity_main2">MainActivity2</string>
 
 
 </resources>
